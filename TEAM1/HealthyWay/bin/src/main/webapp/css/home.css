@@ -1,0 +1,164 @@
+body {
+	margin: 0;
+}
+ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.container {
+	transition: all 0.5s ease-in-out;
+}
+
+.box {
+	/* 아래 두줄은 제이쿼리 부분에서 box에 css 주는거 없을때 필요 */
+	/* float: left; width: calc(100% / 4); */
+	height: 100vh;
+	font-size: 100px;
+	line-height: 100vh;
+	text-align: center;
+	/*border: 10px solid;*/
+	/*box-sizing: border-box;*/
+	overflow:hidden;
+}
+.box>img {
+	width: 100vw;
+	
+}
+.cover {
+	position: absolute;
+	width:100vw;
+	height: 100vh;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 10000;
+	color:white;
+	display: flex;
+	justify-content: flex-start;
+	align-items:center;
+	font-family: sans-serif;
+	font-size: 50px;
+}
+.cover>div {
+	height: 500px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	line-height:50px;
+	box-sizing: border-box;
+	padding:10px;
+}
+.copywriteBox {
+	overflow: hidden;
+	height: 500px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+.copywriteContent {
+	overflow:hidden;
+	width:500px;
+}
+
+.copywriteContent-first span  {
+	opacity: 0;
+	padding-left: 30px;
+}
+
+
+/*==========================애니메이션===============================*/
+
+/* @keyframes duration | timing-function | delay |
+iteration-count | direction | fill-mode | play-state | name */
+
+/* @keyframes duration | timing-function | delay | name */
+
+/* @keyframes duration | name */
+
+.fade-in-box {
+  position:relative;
+  display: inline-block;
+  animation:fadein 2s ease-out forwards ;
+  -moz-animation: fadein 2s ease-out forwards;/* Firefox */
+  -webkit-animation: fadein 2s ease-out forwards; /* Safari and Chrome */
+  -o-animation: fadein 2s ease-out forwards; /* Opera */
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+        left:-130px;
+        
+    }
+    to {
+        opacity: 1;
+        left:0px;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity: 0;
+        left:-130px;
+    }
+    to {
+        opacity: 1;
+        left:0px;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity: 0;
+        left:-130px;
+    }
+    to {
+        opacity: 1;
+        left:0px;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity: 0;
+        left:-130px;
+    }
+    to {
+        opacity: 1;
+        left:0px;
+    }
+}
+
+.dFirst {
+	animation-delay:1s;
+	-moz-animation-delay:1s;
+	-webkit-animation-delay:1s;
+	-o-animation-delay:1s
+}
+
+.dSecond {
+	animation-delay:2s;
+	-moz-animation-delay:2s;
+	-webkit-animation-delay:2s;
+	-o-animation-delay:2s
+}
+
+.dThird {
+	animation-delay:3s;
+	-moz-animation-delay:3s;
+	-webkit-animation-delay:3s;
+	-o-animation-delay:3s
+}
+
+
+/*================= 두번쨰 페이지 ======================*/
+.cover>ul {
+	overflow:hidden;
+	width: 1000px;	
+}
+
+.cover>ul>li {
+	position:relative;
+	left: 220px;
+	float:left; 
+	height: 190px;
+	line-height: 300px;
+	font-size: 80px;
+}

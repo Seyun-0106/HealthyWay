@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.team1.health.dao.ReportDAO">
+	<insert id='reportInsert'>
+		insert into report(board_num,user_id,report_title,report_content,report_type) 
+		values(${board_num},#{user_id},#{report_title},#{report_content},${report_type});
+	</insert>
+	<update id='userReportCount'>
+		update user set report_hit=report_hit+1 where user_id=#{param1};
+	</update>
+</mapper>

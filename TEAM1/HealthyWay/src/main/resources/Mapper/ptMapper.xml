@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.team1.health.dao.PtDAO">
+	<insert id="ptBoardInsert">
+		insert into board(user_id, title, content, type_num) 
+		values(#{user_id}, #{title}, #{content}, 2)
+	</insert>
+	
+	<insert id="ptGroupInsert">
+		insert into PT_group(board_num, start_date, end_date, max_user, keyword, pt_img_file) 
+		values((select board_num from board where title=#{title} and user_id=#{user_id} and content=#{content}), #{start_date}, #{end_date}, #{max_user}, #{keyword}, #{pt_img_file})
+	</insert>
+	
+	<select id="ptList" resultType="BoardVO">
+		select b.board_num, user_id, title, hit, date_format(write_date, '%Y-%m-%d') write_date, state, start_date, end_date, max_user, keyword, pt_img_file, pNum
+		from board b inner join PT_group p on b.board_num=p.board_num
+		left join (select board_num, count(*) pNum from apply_user where user_state="참여중" group by board_num) n on b.board_num=n.board_num
+		where type_num=2
+		<if test="searchWord != null">
+			and (title like '%${searchWord}%' or content like '%${searchWord}%' or user_id like '%${searchWord}%')
+		</if>
+		<if test="state != null">
+			and state=#{state}
+		</if>
+		order by b.board_num desc
+		limit ${onePageRecord} offset ${offsetIndex}
+	</select>
+	
+	<select id="ptBoardSelect" resultType="BoardVO">
+		select b.user_id, b.board_num, title, keyword, state, content, start_date, end_date, datediff(end_date, start_date) datecal, pt_img_file, max_user
+		from board b 
+		inner join PT_group p on b.board_num=p.board_num
+		where b.board_num=#{param1}
+	</select>
+	
+	<select id="leaderSelect" resultType="MemberVO">
+		select u.user_id, user_email, user_name, user_nickname, tel, profie_img, height, gender, age, w.weight, w.write_date
+		from user u left join weigth w on u.user_id=w.user_id
+		where u.user_id=(select user_id from board where board_num = #{param1})
+        order by w.write_date desc
+        limit 1
+	</select>
+	
+	<update id="hitCount">
+		update board set hit = hit+1
+		where board_num=${param1}
+	</update>
+	
+	<delete id="ptDel">
+		delete from board
+		where board_num=#{param1} and user_id=#{param2}
+	</delete>
+	
+	<update id="ptBoardUpdate">
+		update board set 
+		title=#{title}, content=#{content}
+		where board_num=#{board_num} and user_id=#{user_id}
+	</update>
+	
+	<update id="ptGroupUpdate">
+		update PT_group set
+		keyword=#{keyword}, start_date=#{start_date}, end_date=#{end_date}, max_user=#{max_user}, pt_img_file=#{pt_img_file}
+		where board_num=#{board_num}
+	</update>
+	
+	<insert id="ptApplyInsert">
+		insert into apply_user(board_num, user_id)
+		values(#{param1}, #{param2})
+	</insert>
+	
+	<select id="apply_list" resultType="Apply_userVO">
+		select a.user_id, board_num, user_state, user_name, gender, age, height, w.weight, user_nickname
+		from apply_user a 
+		left join user u on a.user_id=u.user_id
+		left join (
+			select user_id ,weight 
+			from weigth where (user_id, write_date) in (
+				select user_id, max(write_date) as write_date 
+				from weigth group by user_id
+				)
+			) w on a.user_id=w.user_id
+		where board_num=#{param1}
+	</select>
+	
+	<update id="applyAccept">
+		update apply_user set user_state="참여중" 
+		where board_num=#{param1} and user_id=#{param2}
+	</update>
+	
+	<delete id="applyDeny">
+		delete from apply_user
+		where board_num=#{param1} and user_id=#{param2}
+	</delete>
+	
+	<select id="applySelect" resultType="Apply_userVO">
+		select a.user_id, user_nickname, board_num, user_state, gender, age, height, w.weight, profie_img
+		from apply_user a 
+		left join user u on a.user_id=u.user_id
+		left join (
+			select user_id ,weight 
+			from weigth where (user_id, write_date) in (
+				select user_id, max(write_date) as write_date 
+				from weigth group by user_id
+				)
+			) w on a.user_id=w.user_id
+		where board_num=#{param1} and user_state="참여중";
+	</select>
+	
+	<select id="totalRecord" resultType="int">
+		select count(b.board_num) cnt
+		from board b inner join PT_group p on b.board_num=p.board_num
+		where type_num = 2
+		<if	test='searchWord != null'>
+			and (title like '%${searchWord}%' or content like '%${searchWord}%' or user_id like '%${searchWord}%')
+		</if>
+		<if test="state != null">
+			and state=#{state}
+		</if>
+	</select>
+	
+	<select id="ptSelectHeart" resultType="BoardVO">
+		select board_num from heart where user_id=#{param1}
+	</select>
+	
+	<insert id="ptInsertHeart">
+		insert into heart(board_num, user_id)
+		values (#{param1}, #{param2})
+	</insert>
+	
+	<delete id="ptDeleteHeart">
+		delete from heart
+		where board_num=#{param1} and user_id=#{param2}
+	</delete>
+	
+	<update id="ptStateUpdate">
+		update PT_group set state="모집완료"
+		where board_num=#{param1}
+	</update>
+</mapper>

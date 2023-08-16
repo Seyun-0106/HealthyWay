@@ -1,0 +1,123 @@
+@charset "UTF-8";
+@import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+
+body {
+	background-size: 100%;
+	background-image: url(../../img/loginback2.jpg);
+	background-repeat: no-repeat;
+}
+.findId-body {
+	min-height: 700px;
+}
+
+.findForm {
+	margin: 0 auto;
+    width: 700px;
+    height: 130px;
+    padding: 40px 0px 240px 0px;
+    background-color: rgba(252, 253, 254);
+    border-radius: 5px;
+    margin-top: 250px;
+    box-shadow: 0 2px 2px 0 lightgray;
+}
+
+.form-signin{
+    width: 450px;
+    margin: 0 auto;
+}
+
+.findFrm_btn_wrap{
+	display: flex;
+}
+
+#log {
+	text-align: center;
+}
+
+.form-label-group {
+	text-align: center;
+	display: flex;
+    border-bottom: 2px solid #000;
+    width: 350px;
+    margin: 0 auto;
+    height: 50px;
+    line-height: 60px;
+    margin-bottom: 20px;
+}
+
+.input-area1 {
+	text-align: left;
+	width: 80px;
+}
+
+.input-area2 {
+	width: 200px;
+	height: 50px;
+	line-height: 60px;
+}
+
+.input-area2 input {
+	width: 90%;
+    height: 30px;
+    border: none;
+    background-color: rgba(252, 253, 254);
+}
+
+.input-area2 input:focus{
+	outline: none;
+}
+
+.find-btn button {
+	height: 92%;
+    width: 80px;
+    margin-left: 20px;
+    border: none;
+    border-radius: 10px;
+    background: #000;
+    color: #fff;
+}
+.find-btn button:hover {
+    background: rgba(255, 75, 85);
+    color: #fff;
+}
+
+.bottom-menu{
+	text-align: left;
+	font-size: 14px;
+}
+.bottom-flex {
+	display: flex;
+}
+
+.bottom-btn{
+	height: 50%;
+    width: 80px;
+    margin-left: 20px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 75, 85);
+    color: white;
+}
+.bottom-id {
+	text-align: center;
+	display: flex;
+    width: 350px;
+    margin: 0 auto;
+    height: 50px;
+    line-height: 40px;
+    margin-bottom: 20px;
+}
+.bottom-menu-left{
+    float: left;
+    margin-right: 75px;
+}
+.bottom-flex2 {
+	display: flex;
+	color: #000;
+}
+.hovert {
+	color: black;
+}
+.hovert:hover {
+	color: rgba(255, 75, 85);
+}

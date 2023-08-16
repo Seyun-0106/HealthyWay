@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.team1.health.dao.MemberDAO">
+	<select id="loginCheck" resultType="com.team1.health.vo.MemberVO">
+		select user_id, user_nickname from user
+		where user_id=#{user_id} and user_pw=#{user_pw}
+	</select>
+
+	<insert id="memberInsert">
+		insert into user(user_id, user_pw, user_name, tel, user_email, age, user_nickname, gender, height, weight)
+		values(#{user_id}, #{user_pw}, #{user_name}, #{tel}, #{user_email}, #{age}, #{user_nickname}, #{gender}, #{height}, #{weight})
+	</insert>
+	<select id="checkId" resultType="com.team1.health.vo.MemberVO">
+		select user_id from user
+		where user_id=#{user_id}
+	</select>
+	<select id="checkNick" resultType="com.team1.health.vo.MemberVO">
+		select user_nickname from user
+		where user_nickname=#{user_nickname}
+	</select>
+	<select id="checkTel" resultType="com.team1.health.vo.MemberVO">
+		select tel from user
+		where tel=#{tel}
+	</select>
+</mapper>

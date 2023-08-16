@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team1.health.dao.TrainDAO">
+	<!-- 운동들 목록 -->
+	<select id="train_list" resultType="com.team1.health.vo.TrainVO">
+		SELECT module_num,module_img, module_title, module_content FROM module
+		<choose>
+			<!-- 타입 선택 -->
+			<when test="module_type != null and module_type != ''">
+				where module_type = #{module_type}
+				<!-- 타입 + 파트 -->
+				<if test="module_part !=null and module_part != ''">
+					and module_part = #{module_part}
+				</if>
+				<!-- 타입 + 강도(diff) -->
+				<if test="module_difficulty != null and module_difficulty != ''">
+					and module_difficulty = #{module_difficulty}
+				</if>
+				<!-- 타입 + 파트 + 강도 -->
+				<if test="(module_part !=null and module_part != '') and
+						  (module_difficulty != null and module_difficulty != '')">
+					and module_part = #{module_part} and module_difficulty = #{module_difficulty}
+				</if>
+			</when>
+			
+			<!-- 파트 선택 -->
+			<when test="module_part != null and module_part != ''">
+				where module_part = #{module_part}
+				<!-- 파트 + 강도 -->
+				<if test="module_difficulty != null and module_difficulty != ''">
+					and module_difficulty = #{module_difficulty}
+				</if>
+			</when>
+			
+			<!-- 강도 선택 -->
+			<when test="module_difficulty != null and module_difficulty != ''">
+				where module_difficulty = #{module_difficulty}
+			</when>
+		
+		</choose>
+		ORDER BY module_num DESC
+	</select>
+	<!-- 나만의 운동 담는 리스트 -->
+	<select id="mytrain_list" resultType="com.team1.health.vo.TrainVO">
+		SELECT module_num,module_img, module_title, module_content FROM module WHERE module_num=#{param1}
+	</select>
+	<!-- 나만의 운동에 이름 저장 -->
+	<insert id="mytrain_insert">
+		<selectKey resultType="int" keyProperty="tnum" order="AFTER">
+         	SELECT LAST_INSERT_ID()
+      	</selectKey>
+		INSERT INTO training_routine(train_title, user_id) VALUES(#{train_title}, #{user_id})
+	</insert>
+	<!-- 나만의 운동에 모듈 저장 -->
+	<insert id="mymodule_insert">
+		INSERT INTO training_module(train_num, module_num) VALUES(${train_num}, ${module_num})
+	</insert>
+	<!-- 임시 저장소에 있던것들 유저가 만든 나만의 운동에 저장 -->
+	<update id="update_train_num">
+		UPDATE training_module SET train_num=#{train_num} WHERE train_num = 0
+	</update>
+	<!-- 나만의 운동 선택하기 -->
+	<select id="get_train_title" resultType="com.team1.health.vo.TrainVO">
+		select train_num, train_title from training_routine where user_id=#{user_id}
+	</select>
+	<!-- 선택한 나만의 운동 보여주기 -->
+	<select id="get_train_list" resultType="com.team1.health.vo.TrainVO">
+		select t.train_title, m.module_num, m.module_img, m.module_title, m.module_content from training_routine t left join training_module tm on t.train_num = tm.train_num
+		join module m on tm.module_num = m.module_num
+		where t.train_num=#{train_num};
+	</select>
+	<!-- 나만의 운동 관리에서 보여주는 리스트 -->
+	<select id="get_all_train_list" resultType="com.team1.health.vo.TrainVO">
+		select t.train_title, t.train_write_date, m.module_num, m.module_img, m.module_title, m.module_content from training_routine t left join training_module tm on t.train_num = tm.train_num
+		join module m on tm.module_num = m.module_num
+		where t.user_id=#{param1};
+	</select>
+	<!-- 나만의 운동 리스트 삭제 -->
+	<delete id="delete_mytrain">
+		delete from training_routine where train_num=#{train_num}
+	</delete>
+	
+	
+	<!-- 유저 루틴에 추가 -->
+	<insert id="user_routine_insert">
+		insert into user_routine(user_id, train_num) values(#{user_id},#{train_num})
+	</insert>
+	
+	<!-- 운동 시작 -->
+	<select id="start_train" resultType="com.team1.health.vo.TrainVO">
+		select module_img, module_title, module_vod_file from module where module_num = #{param1}
+	</select>
+	<!-- 운동 시간 저장 -->
+	<insert id="save_user_count">
+		INSERT INTO user_training_count(user_id, train_year, train_month, train_count, module_title) 
+		VALUES(#{user_id}, #{train_year}, #{train_month}, #{train_count},#{module_title})
+		ON DUPLICATE KEY UPDATE train_count = train_count + #{train_count}
+	</insert>
+	
+	<!-- 운동 장바구니 요소 삭제 -->
+	<delete id="del_mytrain">
+		delete from training_module where module_num=#{param1} and train_num=#{param2}
+	</delete>
+	
+	<!-- user에서 strength랑 favorite 가져오기 -->
+	<select id="get_user" resultType="com.team1.health.vo.TrainVO">
+		select strength, favorite from user where user_id = #{user_id}
+	</select>
+	
+	<!-- 추천 운동 -->
+	<select id="reco_list" resultType="com.team1.health.vo.TrainVO">
+		SELECT m.module_num, m.module_img, m.module_title, m.module_content , m.module_type , m.module_difficulty
+		FROM module m  JOIN user u ON u.user_id=#{user_id} 
+		<if test="(strength != null or strength != '') and (favorite!=null or favorite!= '')">
+			where m.module_difficulty=u.strength and m.module_type = u.favorite
+		</if>
+	</select>
+	
+	<!--  -->
+	<select id="train_set" resultType="com.team1.health.vo.TrainVO">
+		SELECT m.module_num,m.module_img, m.module_title, m.module_content 
+		FROM module m left join training_module t on t.module_num=m.module_num
+		WHERE train_num=#{param1}
+	</select>
+</mapper>

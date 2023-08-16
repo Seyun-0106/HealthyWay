@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team1.health.dao.RecipeDAO">
+	
+	<select id="mainList" resultType="com.team1.health.vo.BoardVO">
+		select b.board_num, b.user_id, b.title, r.recipe_img_file, r.total_kcal
+		from board b join recipe_board r
+		on b.board_num = r.board_num
+		where b.type_num=1 and b.board_num!=0 and r.total_kcal>0
+	</select>
+	
+	<select id="recipeList" resultType="com.team1.health.vo.BoardVO">
+		select b.board_num, b.user_id, b.title, b.type_num, b.hit, r.recipe_img_file, r.total_kcal, count(reply_num) replycount
+		from board b
+        left join recipe_board r on b.board_num = r.board_num
+		left join reply re on b.board_num = re.board_num
+		where b.type_num=1 and b.board_num!=0
+		GROUP BY b.board_num
+		<if test='searchValue != null'>
+			and b.title like '%${searchValue}%' or b.content like '%${searchValue}%'
+		</if>
+		<if test="searchKey=='칼로리'">
+			 order by r.total_kcal asc limit ${onePageRecord} offset ${offsetIndex}
+		</if>
+		<if test="searchKey=='조회'">
+			order by b.hit desc limit ${onePageRecord} offset ${offsetIndex}
+		</if>
+		<if test="searchKey=='댓글'">
+			order by replycount desc limit ${onePageRecord} offset ${offsetIndex}
+		</if>
+		<if test="searchKey==null">
+			order by b.board_num desc limit ${onePageRecord} offset ${offsetIndex}
+		</if>
+		
+	</select>
+	
+	<select id="totalRecord" resultType="int">
+		select count(board_num) from board where type_num=1 and board_num!=0
+		<if test='searchValue != null'>
+			and title like "%${searchValue}%" or content like '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="searchIngred" resultType="com.team1.health.vo.IngredientVO">
+		select gred_num, gred_kcal, gred_name, gred_type from ingredient where
+		<if test="searchKey=='재료명'">
+			gred_name like '%${searchValue}%'
+		</if>
+		<if test="searchKey=='분류'">
+			gred_type like '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="addIngred" resultType="com.team1.health.vo.IngredientVO">
+		select gred_num, gred_kcal, gred_name, gred_type from ingredient where gred_num=#{param1}
+	</select>
+	
+	<insert id="insertIngred">
+		insert into recipe_ingredient(gred_num, board_num, gred_gram, gred_kcal)
+		values(#{gred_num}, 0, ${gred_gram}, ${gred_kcal})
+	</insert>
+	
+	<select id="ingredList" resultType="com.team1.health.vo.Recipe_IngredVO">
+		select i.gred_name, r.gred_gram, r.gred_num, r.gred_kcal, r.board_num
+		from ingredient i join recipe_ingredient r
+		on i.gred_num = r.gred_num
+		where r.board_num=${param1} or r.board_num=0
+	</select>
+	
+	<delete id="deleteIngred">
+		delete from recipe_ingredient where gred_num=#{param1} and board_num=${param2} and gred_gram=${param3}
+	</delete>
+	
+	<delete id="deleteAllIngred">
+		delete from recipe_ingredient where board_num=${board_num}
+	</delete>
+	
+	<insert id="recipeInsert">
+		insert into board(user_id, title, content, type_num)
+		values(#{user_id}, #{title}, #{content}, ${type_num})
+	</insert>
+	
+	<insert id="recipeInsert2">
+		insert into recipe_board(user_id, board_num, recipe_img_file, total_kcal)
+		values(#{user_id},(select board_num from board where user_id=#{user_id} and title=#{title} and content=#{content})
+				, #{recipe_img_file}, ${total_kcal})
+	</insert>
+	
+	<update id="setBoardNum">
+		update recipe_ingredient set board_num=(select board_num from board where user_id=#{user_id} and title=#{title} and content=#{content})
+		where board_num=0
+	</update>
+	
+	<select id="recipeView" resultType="com.team1.health.vo.BoardVO">
+		select b.board_num, b.user_id, b.title, b.content, b.hit, date_format(b.write_date, '%Y-%m-%d %H:%i') write_date,
+			b.mod_date, b.type_num , r.recipe_img_file, r.total_kcal
+		from board b join recipe_board r
+		on b.board_num = r.board_num
+		where b.board_num=${param1}
+	</select>
+	
+	<update id="hitCount">
+		update board set hit = hit+1 where board_num=${param1}
+	</update>
+	
+	<update id="recipeUpdate">
+		update board set title=#{title}, content=#{content}, mod_date=now()
+		where board_num=${board_num}
+	</update>
+	
+	<update id="recipeUpdate2">
+		update recipe_board set recipe_img_file=#{param1}, total_kcal=${param2}
+		where board_num=${param3}
+	</update>
+	
+	<delete id="recipeDelete">
+		delete from board where board_num=#{param1}
+	</delete>
+	
+	<insert id="insertHeart">
+		insert into heart(user_id, board_num) values(#{param1}, ${param2})
+	</insert>
+	
+	<delete id="deleteHeart">
+		delete from heart where board_num=${param1}
+	</delete>
+	
+	<select id="selectHeart" resultType="com.team1.health.vo.BoardVO">
+		select board_num from heart where user_id=#{param1}
+	</select>
+	
+	<insert id="insertReply">
+		insert into reply(user_id, board_num, content) values(#{user_id}, ${board_num}, #{content})
+	</insert>
+	
+	<delete id="deleteReply">
+		delete from reply where reply_num=${param1}
+	</delete>
+	
+	<update id="updateReply">
+		update reply set content=#{content} where reply_num=${reply_num} and board_num=${board_num}
+	</update>
+	
+	<select id="replyList" resultType="com.team1.health.vo.ReplyVO">
+		select reply_num, user_id, board_num, content, date_format(reply_date, '%Y-%m-%d %H:%i') reply_date
+		from reply where board_num=${param1}
+	</select>
+	
+</mapper>

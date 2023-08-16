@@ -1,0 +1,406 @@
+@charset "UTF-8";
+/*a태그 설정*/
+a:link { color: black; text-decoration: none;}
+a:visited { color: black; text-decoration: none;}
+a:hover { color: black; text-decoration: none;}
+
+ul,li{
+	margin:0;
+	padding:0;
+	list-style: none;
+}
+@font-face {
+ font-family: 'NanumBarunGothic';
+ font-style: normal;
+ font-weight: 400;
+ src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+ src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
+}
+
+body{
+	background-image:url('/recipeImg/recipe.jpg');
+	background-repeat : no-repeat;
+    background-size : cover;
+    font-family: "NanumBarunGothic";
+}
+input:focus, select:focus, textarea:focus{
+	outline:none;
+}
+
+/*왼쪽 div(제목, 이미지 추가)-------------------------------------------*/
+#writeFrm{
+	margin:7%;
+	padding:4%;
+	overflow:auto;
+	border-radius:20px;
+	border:1px solid #ddd;
+	background-color: white;
+	opacity: 0.9;
+	font-size: 11pt;
+}
+#imgDiv{
+	width:37%;
+	height:500px;
+	float: left;
+}
+#file {
+	display: none
+}
+#preview{
+	width:100%;
+	height:100%;
+	object-fit: cover;
+}
+
+/*오른쪽 div(레시피 정보)-------------------------------------------*/
+#recipeInfo{
+	width:57%;
+	height:80%;
+	float:left;
+	margin-left:6%;
+}
+#title>span{
+	text-align: center;
+	height:35px;
+	line-height: 35px;
+	margin-right:10px;
+	margin-bottom:3%;
+}
+#title>input{	
+	width:90%;
+	height:35px;
+	padding:1%;
+	border-radius:10px;
+	border:1px solid rgb(200,200,200);
+}
+#recipeInfo>p{
+	width:100%;
+	font-weight: bold;
+}
+#totalKcal{
+	padding-left:1%;
+	padding-right:1%;
+	margin-right:0.5%;
+	height:25px;
+	line-height:25px;
+	float:right;
+	background-color: #474747;
+	color:white;
+	border-radius:5px;
+}
+#content{
+	padding:2%;
+	width:100%;
+	height:200px;
+	border-radius:10px;
+	border:1px solid rgb(200,200,200);
+	resize: none;
+	margin:0 auto;
+}
+/*재료 리스트*/
+#ingredList{
+	overflow:auto;
+	width:100%;
+	height:150px;
+	margin-bottom:4%;
+	border:1px solid rgb(200,200,200);
+	border-radius: 10px;
+	padding-bottom:1%;
+}
+#ingredList>li{
+	padding-left:2%;
+	padding-top:1%;
+	cursor: pointer;
+}
+/*재료 추가,삭제 버튼*/
+#recipeInfo>p>button{
+	float:right;
+	width:7%;
+	height:25px;
+	line-height:25px;
+	border:none;
+	border-radius:5px;
+	background-color: rgb(252,199,71);
+	font-weight:bold;
+	font-size:10pt;
+}
+#ingredList>li:hover{
+	font-weight: bold;
+}
+/* x */
+.times{
+	color:#FF5454;
+}
+
+#recipeBtn{
+	width:100%;
+}
+#recipeBtn>input[type=submit], #recipeBtn>input[type=reset]{
+	width:75px;
+	height:30px;
+	border:none;
+	border-radius:30px;
+	background-color: #FF5454;
+	color:white;
+	cursor: pointer;
+	float:right;
+	margin-top:10px;
+}
+
+/*모달창-------------------------------------------------*/
+.modal-dialog{
+	max-width: 55%;
+    margin: 2rem auto;
+}
+.modal-body{
+	height:500px;
+}
+#closeBtn{
+	width:70px;
+	height:27px;
+	border:none;
+	border-radius:30px;
+	background-color: #FF5454;
+	color:white;
+	cursor: pointer;
+}
+
+/*재료 리스트 div*/
+#ingredView{
+	padding-top:10px;
+	width:50%;
+	height:100%;
+	float:left;
+}
+#ingredView>hr{
+	margin-bottom:10px;
+	border:1px solid #ffd0d0;
+	opacity: 0.5;
+}
+#ingredView p{
+	text-align: center;
+	margin-bottom:7px;
+}
+#ingredSearch>select{/*카테고리*/
+	width:18%;
+	height:30px;
+	border-radius:10px;
+	border-color:rgb(200,200,200);
+	font-size:11pt;
+	text-align: center;
+}
+#ingredSearch>select>option{
+	text-align: center;
+}
+#ingredSearch>input[type=text]{/*검색창*/
+	width:60%;
+	height:30px;
+	padding:10px;
+	border-radius:10px;
+	border:1px solid rgb(200,200,200);
+}
+#ingredSearch>input[type=submit]{/*검색 버튼*/
+	width:18%;
+	height:30px;
+	border:none;
+	border-radius:30px;
+	background-color: #FF5454;
+	color:white;
+	cursor : pointer;
+}
+
+/*재료 리스트 출력*/
+.list-group-item{
+	height:40px;
+	line-height:40px;
+	font-size:11pt;
+	padding:0;
+	padding-left:10px;
+}
+
+/*페이징*/
+.paging{
+	text-align: center;
+	margin-left:1.5%;
+	margin-top:2.5%;
+}
+.paging>a>li{
+	display:inline-block;
+	width:25px;
+	height:25px;
+	line-height:24px;
+	text-align:center;
+	font-size:11pt;
+	margin-right:1.5%;
+	border-radius:10px;
+	background-color: rgb(235,235,235);
+}
+.active_list{
+	color:white;
+	background-color:#FF5454 !important;
+}
+
+/*재료 추가 폼-------------------------------------------*/
+#ingredFrm{
+	background-color:#f4f4f4;
+	border-radius:20px;
+	width:47%;
+	height:100%;
+	float:left;
+	margin-left:18px;
+}
+#ingredFrm>p{
+	text-align: center;
+	margin-top:20px;
+}
+
+/*계량 아이콘 div*/
+#measurement{
+	text-align: center;
+	padding-left:3%;
+ 	margin-top:10%;
+}
+#measurement>li{
+	display:inline-block;
+	margin-right:3%;
+	cursor: pointer;
+	margin-bottom:5%;
+}
+#measurement>li>img{
+	width:70px;
+	height:10%;
+}
+
+/*gram 입력 div*/
+#ingredInfo{
+	width:50%;
+	margin:0 auto;
+	margin-top:4%;
+	text-align: center;
+}
+#ingredInfo>p{
+	text-align: center;
+}
+#ingredName{
+	font-size:1.3em !important;
+}
+#ingredGram{
+	width:70%;
+	height:30px;
+	line-height:33px;
+	text-align: center;
+	border-radius:30px;
+	border:none;	
+	margin-bottom:20px;
+}
+#ingredBtn{
+	width:50%;
+	height:30px;
+	margin:0 auto;
+	margin-top:10%;
+}
+#ingredBtn>input[type=submit],#ingredBtn>input[type=reset]{
+	float:left;
+	width:43%;
+	height:100%;
+	border:none;
+	border-radius:30px;
+	background-color: #FFA733;
+	color:white;
+	cursor : pointer;
+}
+#ingredBtn>input[type=reset]{
+	float:right;
+}
+
+@media ( min-width: 1800px ) {
+	#writeFrm{
+		padding:5%;
+		font-size:16pt;
+	}
+	#imgDiv{
+		height: 850px;
+	}
+	#recipeInfo{
+		height:850px;
+		font-size:18pt;
+	}
+	#title{
+		margin-bottom:4%;
+	}
+	#title>input{
+		width:91%;
+		height: 55px;
+	}
+	#boardInfo{
+		font-size:15pt;
+	}
+	#ingredList{
+		height:190px;
+	}
+	#recipeInfo>p>button{
+		width:7%;
+		height:40px;
+		line-height:40px;
+		font-size:16pt;
+	}
+	#content{
+		height:390px;
+	}
+	#totalKcal{
+		height:40px;
+		line-height:40px;
+	}
+	#recipeBtn>input[type=submit], #recipeBtn>input[type=reset]{
+		width:10%;
+		height:45px;
+		line-height:45px;
+		margin-top:1.5%;
+	}
+	/*모달창*/
+	.modal-body{
+		height:700px;
+		font-size:15pt;
+	}
+	#ingredSearch>select{/*카테고리*/
+		height:50px;
+		font-size:15pt;
+	}
+	#ingredSearch>input[type=text]{
+		height:50px;
+	}
+	#ingredSearch>input[type=submit]{/*검색 버튼*/
+		height:50px;
+	}
+	.list-group-item{
+		height:60px;
+		line-height:63px;
+		font-size:15pt;
+		padding:0;
+		padding-left:2%;
+	}
+	.paging>a>li{
+		width:35px;
+		height:40px;
+		line-height:40px;
+		font-size:15pt;
+	}
+	/*계량 아이콘*/
+	#measurement>li>img{
+		width:100px;
+	}
+	#ingredGram{
+		width:70%;
+		height:45px;
+		line-height:45px;
+	}
+	#ingredBtn{
+		height:45px;
+	}
+	/*모달창 닫기*/
+	#closeBtn{
+		width:6%;
+		height:40px;
+	}
+	
+}

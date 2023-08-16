@@ -1,0 +1,338 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<style>
+	#writeDiv{
+		padding-bottom:30px;
+	}
+	#writeDiv ul{
+		box-sizing:border-box;
+		width:100%;
+		position:relative;
+		overflow:hidden;
+		white-space:nowrap;
+		text-align:center;
+	}
+	.pageNation>li{
+		width:50px;
+		display:inline-block;
+	}
+	a{
+		color:black;
+	}
+	.writeDivFirstLi{
+		width:50px;
+		height:200px;
+		line-height:50px;
+		text-align:left;
+		box-sizing:border-box;
+		display:block;
+		float:left;
+		writing-mode: vertical-rl;
+		letter-spacing:5px;
+		text-align:center;
+	}
+	.writeDivlastLi{
+		width:100%;
+		height:30px;
+		line-height:30px;
+		text-align:center;
+		margin-top:210px;
+		margin-bottom:10px;
+	}
+	.writeInfor{
+		float:left;
+		position:relative;
+		height:200px;
+		box-sizing:border-box;
+		margin-left:15px;
+	}
+	.writeLiInforDiv{
+		width:180px;
+		padding:5px;
+		box-sizing:border-box;
+		border:1px solid #ddd;
+		cursor:pointer;
+	}
+	.writeLiInfor{
+		width:170px;
+		height:140px;
+		text-align:left;
+		overflow:hidden;
+	}
+	.writeLiInfor img{
+		position:relative;
+		left:50%;
+		top:50%;
+		transform:translate(-50%,-50%);
+		width:100%;
+	}
+	.writeLiInforTitle{
+		width:170px;
+		height:50px;
+		text-align:center;
+		line-height:50px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+	}
+	.wErrorPage{
+		position:absolute;
+		top:30%;
+		left:38%;
+		font-size:1.5em;
+		font-weight:bold;
+	}
+</style>
+<script>
+$(()=>{
+	groupListAll(1)
+	achieveListAll(1)
+	foodListAll(1)
+})
+//게시판 페이지 이동
+function movePage(url,board_num){
+	if(url==1){
+		location.href="/recipe/view?board_num="+board_num;
+	}else if(url==2){
+		location.href="/board/ptView?board_num="+board_num;
+	}else if(url==3){
+		//게시판으로 이동 링크 달아야 함.
+		location.href="/successView?board_num="+board_num;
+	}
+}
+//그룹 목록 페이지 네이션
+function groupPageNation(pageNum){
+	$.ajax({
+		url:"/mypage/groupPageNagion",
+		type:'get',
+		data:{
+			'pageNum':pageNum
+			//'searchKey':$('#').val(),
+			//'searchWord':$('#').val()
+		},
+		success:function(result){
+			var tag = "<ul class='pageNation'>"
+			if(result.pageNum==1){
+				tag+="<li>prev</li>";				
+			}else{
+				tag+="<li><a href='javascript:groupListAll("+(pageNum-1)+")'>prev</a></li>";				
+			}
+			for(var i=result.startPage; i<=(result.startPage+result.onePageCount-1);i++){
+				if(i<=result.totalPage){
+					if(i==result.pageNum){
+						tag+="<li style='color:red'>"+i+"</li>";
+					}else{
+						tag+="<li><a href='javascript:groupListAll("+i+")'>"+i+"</a></li>";
+					}
+				}
+			}
+			if(result.pageNum>=result.totalPage){
+				tag+="<li>next</li>";				
+			}else{
+				tag+="<li><a href='javascript:groupListAll("+(pageNum+1)+")'>next</a></li>";				
+			}
+			tag+="</ul>"
+			$("#groupPageNation").html(tag);
+		}
+	});
+}
+//그룹 목록 출력
+function groupListAll(pageNum) {
+	var url = "/mypage/groupListAll";
+	$.ajax({
+		url: url,
+		data:{
+			'pageNum':pageNum
+			//'searchKey':$('#searchKey').val(),
+			//'searchWord':$('#searchWord').val()
+		},
+		type:"get",
+		success: function(result) {
+			var $result = $(result);
+			var tag = "";
+			if(result.length>0){
+				$result.each(function(idx, vo){
+					tag += "<div class='writeInfor' onclick='movePage(2,"+vo.board_num+")'>";
+					tag += "<div class='writeLiInforDiv'>";
+					tag += "<div class='writeLiInfor'>";
+					tag += "<img src='/ptImg/"+vo.pt_img_file+"'/>"
+					tag += "</div>";
+					tag += "<div class='writeLiInforTitle'>"+vo.title+"</div>";
+					tag += "</div>";
+					tag += "</div>";
+				});
+			}else{
+				tag += "<div class='wErrorPage'>가입한 그룹이 없습니다!!<div>";
+			}
+			
+			$("#groupList").html(tag);
+			groupPageNation(pageNum);
+		},
+		error: function(e) {
+			console.log(e.responseText);
+			
+		}
+	});
+}
+//성공 스토리 출력
+function achieveListAll(pageNum) {
+	var url = "/mypage/achieveList";
+	$.ajax({
+		url: url,
+		data:{
+			'pageNum':pageNum
+			//'searchKey':$('#searchKey').val(),
+			//'searchWord':$('#searchWord').val()
+		},
+		type:"get",
+		success: function(result) {
+			var $result = $(result);
+			var tag = "";
+			if(result.length>0){
+				$result.each(function(idx, vo){
+					tag += "<div class='writeInfor' onclick='movePage(3,"+vo.board_num+")'>";
+					tag += "<div class='writeLiInforDiv'>";
+					tag += "<div class='writeLiInfor'>";
+					tag += "<img src='/successImg/"+vo.img_file1+"'/>"
+					tag += "</div>";
+					tag += "<div class='writeLiInforTitle'>"+vo.title+"</div>";
+					tag += "</div>";
+					tag += "</div>";
+				});
+			}else{
+				tag += "<div class='wErrorPage'>작성한 글이 없습니다!!<div>";
+			}
+			$("#achieveList").html(tag);
+			achievePageNation(pageNum);
+		},
+		error: function(e) {
+			console.log(e.responseText);
+		}
+	});
+}
+//성공 스토리 페이지 네이션
+function achievePageNation(pageNum){
+	$.ajax({
+		url:"/mypage/achievePageNagion",
+		type:'get',
+		data:{
+			'pageNum':pageNum
+			//'searchKey':$('#').val(),
+			//'searchWord':$('#').val()
+		},
+		success:function(result){
+			var tag = "<ul class='pageNation'>"
+			if(result.pageNum==1){
+				tag+="<li>prev</li>";				
+			}else{
+				tag+="<li><a href='javascript:achieveListAll("+(pageNum-1)+")'>prev</a></li>";				
+			}
+			for(var i=result.startPage; i<=(result.startPage+result.onePageCount-1);i++){
+				if(i<=result.totalPage){
+					if(i==result.pageNum){
+						tag+="<li style='color:red'>"+i+"</li>";
+					}else{
+						tag+="<li><a href='javascript:achieveListAll("+i+")'>"+i+"</a></li>";
+					}
+				}
+			}
+			if(result.pageNum>=result.totalPage){
+				tag+="<li>next</li>";				
+			}else{
+				tag+="<li><a href='javascript:achieveListAll("+(pageNum+1)+")'>next</a></li>";				
+			}
+			tag+="</ul>"
+			$("#achievePageNation").html(tag);
+		}
+	});
+}
+//레시피 스토리 출력
+function foodListAll(pageNum) {
+	$.ajax({
+		url: "/mypage/foodListAll",
+		data:{
+			'pageNum':pageNum
+			//'searchKey':$('#searchKey').val(),
+			//'searchWord':$('#searchWord').val()
+		},
+		type:"get",
+		success: function(result) {
+			var $result = $(result);
+			var tag = "";
+			if(result.length>0){
+				$result.each(function(idx, vo){
+					tag += "<div class='writeInfor' onclick='movePage(1,"+vo.board_num+")'>";
+					tag += "<div class='writeLiInforDiv'>";
+					tag += "<div class='writeLiInfor'>";
+					tag += "<img src='/recipeImg/upload/"+vo.recipe_img_file+"'/>"
+					tag += "</div>";
+					tag += "<div class='writeLiInforTitle'>"+vo.title+"</div>";
+					tag += "</div>";
+					tag += "</div>";
+				});
+			}else{
+				tag += "<div class='wErrorPage'>작성한 레시피가 없습니다!!<div>";
+			}
+			$("#foodList").html(tag);
+			foodPageNation(pageNum);
+		},
+		error: function(e) {
+			console.log(e.responseText);
+		}
+	});
+}
+//레시피 스토리 페이지 네이션
+function foodPageNation(pageNum){
+	$.ajax({
+		url:"/mypage/foodPageNation",
+		type:'get',
+		data:{
+			'pageNum':pageNum
+			//'searchKey':$('#').val(),
+			//'searchWord':$('#').val()
+		},
+		success:function(result){
+			var tag = "<ul class='pageNation'>"
+			if(result.pageNum==1){
+				tag+="<li>prev</li>";
+			}else{
+				tag+="<li><a href='javascript:foodListAll("+(pageNum-1)+")'>prev</a></li>";				
+			}
+			for(var i=result.startPage; i<=(result.startPage+result.onePageCount-1);i++){
+				if(i<=result.totalPage){
+					if(i==result.pageNum){
+						tag+="<li style='color:red'>"+i+"</li>";
+					}else{
+						tag+="<li><a href='javascript:foodListAll("+i+")'>"+i+"</a></li>";
+					}
+				}
+			}
+			if(result.pageNum>=result.totalPage){
+				tag+="<li>next</li>";				
+			}else{
+				tag+="<li><a href='javascript:foodListAll("+(pageNum+1)+")'>next</a></li>";				
+			}
+			tag+="</ul>"
+			$("#foodPageNation").html(tag);
+		}
+	});
+}
+</script>
+<div id='writeDiv'>
+ 	<ul>
+ 		<li class='writeDivFirstLi' style='background-color:#FF748C; color:white;'>가입 그룹</li>
+ 		<li id='groupList'></li>
+ 		
+ 		<li class='writeDivlastLi' id='groupPageNation'></li>
+ 	</ul>
+ 	<ul>
+ 		<li class='writeDivFirstLi' style='background-color:#FF748C; color:white;'>성공 스토리</li>
+ 		<li id='achieveList'></li>
+ 		
+ 		<li class='writeDivlastLi' id='achievePageNation'></li>
+ 	</ul>
+ 	<ul>
+ 		<li class='writeDivFirstLi' style='background-color:#FF748C; color:white;'>레시피</li>
+ 		<li id='foodList'></li>
+ 		<li class='writeDivlastLi' id='foodPageNation'></li>
+ 	</ul>
+</div>

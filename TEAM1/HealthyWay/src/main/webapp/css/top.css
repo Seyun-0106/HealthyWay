@@ -1,0 +1,234 @@
+@charset "UTF-8";
+
+@font-face {
+   font-family: 'NanumBarunGothic';
+   font-style: normal;
+   font-weight: 400;
+   src:
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+   src:
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix')
+      format('embedded-opentype'),
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff')
+      format('woff'),
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf')
+      format('truetype');
+}
+@font-face {
+	font-family:'NanumGothic'; 
+	src: url('images/NanumGothic.eot');
+}
+@media ( min-width: 1800px ) {
+	.top {
+   		font-family: "NanumBarunGothic";
+   		font-size:28px !important;
+	}
+	
+	.menu-container {
+		margin-top:1vh;	
+	}
+	.gnb span {
+		font-size:20px !important;
+		padding-bottom: 6px;
+	} 
+	
+			
+}
+
+.top {
+   		font-family: "NanumBarunGothic";
+   		font-size:18px;
+	}
+a {
+	text-decoration: none;
+	color:rgb(50,50,50);
+}
+
+
+body {
+	margin: 0;
+	padding:0;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.top {
+	display: flex;
+	justify-content: space-between;
+	color: rgb(50,50,50);
+	align-items: center;
+	height: 9vh;
+	border-bottom: 1px solid #ddd;
+	background-color: white; 
+	z-index:10000000;
+}
+.top>ul  {
+	display: flex;
+	align-items: center;
+}
+.logo img {
+	width: 30vh;
+}
+.logo-container {
+	margin-left:2vw;
+	height: 100%;
+}
+
+/*===== menu-container=====*/
+.menu-container {
+	display: flex;
+	justify-content:space-around;
+	align-items: center;
+	width:50%;
+	height:100%;
+	padding-top:1vh;
+}
+.menu-container>li {
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	height: 100%;
+}
+.menu-container a  {
+	position: relative;
+	padding-bottom: 8px;
+	text-decoration: none !important;
+}
+.menu-container a:before {
+	content:'';
+	position: absolute;
+	background-color:crimson;
+	height: 3px;
+	
+	width:0;
+	bottom:0;
+	transition: 0.5s;
+	
+	left: 50%;
+	transform: translateX(-50%);	
+}
+.menu-container a:hover:before {
+	width: 100%;
+}
+
+
+/*====== login-container=======*/
+
+.login-container {
+	height: 100%;
+}
+
+.login-container a:hover {
+	color: #f0094a;
+}
+
+.login-container>li:last-of-type {
+	margin-right:2vw;
+	margin-left:1vw;
+}
+
+
+.profile-container1 {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	margin-top:0.6vh;
+	width: 5vh;
+	height: 5vh;
+	border-radius: 50%;
+	overflow: hidden;
+	cursor: pointer;
+	position: relative;	
+	margin-right:15px;
+}
+.profile-container1 img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 100%;
+	transform: translate(-50%, -50%);
+}
+
+
+.bi-person-fill {
+	transform:scale(1.6);
+	transform-origin: 50% 50%;
+}
+
+.dropdown-content1 {
+	/*肄섑뀗痢� �젙�젹*/
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	
+	/*諛뺤뒪 �꽕�젙*/
+	overflow: hidden;
+	box-sizing:border-box;
+	border-radius: 5%;
+	border: 1px solid rgba(5,5,5, 0.2);
+	box-shadow: 0px 0px 10px 0px rgba(5, 5, 5, 0.3);
+	background-color: white;
+	
+	/*�븷�땲硫붿씠�뀡 �슚怨쇱꽕�젙*/
+	opacity:0;
+	transform:scale(0);
+	transform-origin: 100% 0;
+	transition-property:transform, opacity;
+	transition-duration:300ms;
+	position:absolute;
+	transition-timing-function:ease;
+	z-index:100000000;
+		
+}
+.display-show {
+	opacity:1;
+	transform:scale(1);	
+}
+.gnb {
+	width:100%;
+	text-align: center;
+	display:flex;
+	flex-direction:column;
+	justify-content: space-around;
+	margin:15px;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+.gnb li {	
+	width:100%;	
+	margin-bottom: 13px;	
+}
+.gnb span {
+	position: relative;
+	cursor:pointer;
+	color: rgb(10,10,10);
+	font-size:16px;
+	/*�뀓�뒪�듃�뿉�꽌 諛묒쨪 媛꾧꺽 �쓣�슦湲�*/
+	padding-bottom: 6px;
+} 
+.gnb li:last-of-type {
+	margin-bottom:0px;
+	
+}
+
+.gnb span:before {
+	content:"";
+	position: absolute; /*遺�紐� �슂�냼�뿉�뒗 position: relative瑜� 二쇱뼱�빞 �븳�떎.*/
+	background-color: crimson;
+	height: 0.35vh; /*諛묒쨪 援닿린*/
+	
+	width: 0; /*珥덇린�뿉 蹂댁씠吏� �븡�룄濡�*/
+	bottom: 0; /*a�깭洹� �븘�옒�뿉 �쐞移� �떆�궎湲�*/
+	transition: 0.5s; /*�븷�땲硫붿씠�뀡 �룞�옉 �떎�뻾 �떆媛� �젙�쓽*/
+	/*媛��긽 �슂�냼瑜� 媛��슫�뜲濡� �씠�룞�떆�궎湲�*/
+	left:50%;
+	transform:translateX(-50%);
+}
+
+/*�깭洹멸� �샇踰꾨쭅 �릺硫� 媛��긽 �슂�냼�쓽 �겕湲곕�� 100%濡� �궎�슦湲�*/
+.gnb span:hover:before {
+	width:100%;
+}

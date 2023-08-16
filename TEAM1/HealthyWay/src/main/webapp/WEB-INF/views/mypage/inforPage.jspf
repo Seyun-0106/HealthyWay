@@ -1,0 +1,239 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<script>
+//미리보기 함수
+$(()=>{
+	//미리보기 이벤트
+	$("#profieImgChange").on('change', function(){
+    readURL();
+    });
+	//수정하기 버튼 클릭.
+	//한번 누를 경우 폼을 입력가능하게 변환
+	//두번 누를 경우 submit 발생
+	let chkUpdateBtn=0;
+	$("#updateBtn").click(function(){
+		//console.log('실행')
+		if(chkUpdateBtn==0){
+			$("input,select").removeAttr('disabled');
+			chkUpdateBtn++;
+		}else{
+			$("#updateBtn").attr('type','submit');			
+			chkUpdateBtn=0;
+		}
+	});
+	//수정폼 서브밋 이벤트
+	$("#inforFrm").submit(function(){
+		event.preventDefault();
+		if(confirm("입력한 값으로 데이트를 수정 하시겠습니까?")){
+			$.ajax({
+				url:"/mypage/userUpdate",
+				processData : false,
+		        contentType : false,
+				data:new FormData($("#inforFrm")[0]),
+				type:'post',
+				success:function(response){
+					if(response>=1){
+						alert("수정하였습니다.")
+						location.reload();						
+					}else{
+						alert("수정된 데이터가 없습니다!!!")
+					}
+				}
+			})
+		}
+	});
+	//탈퇴하기 기능
+	//데이터 세션 값으로 변경해야함!
+	$("#deleteBtn").click(function(){
+		if(confirm("정말 탈퇴 하시겠습니까?")){
+			$.ajax({
+				url:"/mypage/user",
+				data:{
+					user:'${userData.user_id }'
+				},
+				type:'delete',
+				success:function(response){
+					if(response>=1){
+						alert('저희 사이트를 이용해 주셔서 감사했습니다.');
+						location.href="/";
+					}else{
+						alert("탈퇴실패");
+					}
+				}
+			})
+		}
+	});
+	$("#inforDiv ul>li>input[type='text'],#gender").focus(function(){
+		$(event.target).parent().addClass('inputFocusClass');
+	})
+	$("#inforDiv ul>li>input[type='text'],#gender").blur(function(){
+		$(event.target).parent().removeClass('inputFocusClass');
+	})
+})
+function readURL() {
+	//console.log(input)
+	//console.log(event.target)
+    if (event.target.files && event.target.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+        	//console.log(e)
+        	$('#profieView').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+</script>
+<style>
+#inforDiv{
+	width:100%;
+	text-align:center;
+}
+#imgInforDiv{
+	text-align:left;
+	width:50%;
+	height:720px;
+	overflow:hidden;
+	border: 1px solid #ddd;
+	float:left;
+}
+#imgInforDiv img{
+	position:relative;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	height:100%;
+}
+#inforDiv ul{
+	width:350px;
+	float:left;
+	margin:0px 0px 0px 70px;
+}
+#inforDiv ul>li:nth-of-type(2n+1){
+	/*위 오른 아래 왼*/
+	margin:10px 0px 10px 10px;
+	text-align:left;
+}
+#inforDiv ul>li:nth-of-type(2n+2){
+	margin:0 auto;
+	border:1px solid #ddd;
+	transition-duration:0.5s;
+	height:40px;
+	line-height:40px;
+	border-radius:10px;
+	overflow:hidden;
+}
+#inforDiv ul>li>input[type='text'],#gender{
+	text-align:center;
+	width:100%;
+	height:120%;
+	position:relative;
+	top:50%;
+	left:50%;
+	transform: translate(-50% ,-50% );
+	outline:none;
+	border:none;
+}
+#gender{
+	-o-appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+#gender>option{
+	width:300px;
+	padding: 3px 0;
+}
+.inputFocusClass{
+	border: 1px solid rgba(20, 149, 167) !important;
+	box-shadow:1px 1px 5px 1px rgba(20, 149, 167, 0.4);
+}
+.inforDataBtn{
+	height:40px;
+	width:150px;
+	margin-bottom:50px;
+	border:none;
+	border-radius:10px;
+	background-color:rgb(171,169,211);
+	color:white;
+	position:relative;
+	left:15px;
+	cursor:pointer;
+}
+.inforDataBtn:hover{
+	box-shadow:1px 2px 5px 1px rgb(171,169,211);
+}
+</style>
+<div id='inforDiv'>
+	<form id='inforFrm' method='post'>
+		<div id="imgInforDiv">
+			<input type='file' accept='image/*' name='profile_img' id='profieImgChange' style='display:none;'/>
+			<label for='profieImgChange'><img src='/img/${userData.profie_img }' id='profieView'/></label>
+			<input type="hidden" value="${userData.profie_img }" name="profie_img"/>
+		</div>
+		<ul>
+			<li>
+				<span>id</span><span style='color:red'> *</span>
+			</li>
+			<li>
+				<span>${userData.user_id }</span>
+				<input type="hidden" name="user_id" value="${userData.user_id }"/>	
+			</li>
+			<li>
+				<span>이름</span><span style='color:red'> *</span>
+			</li>
+			<li>
+				<span>${userData.user_name }</span>
+			</li>
+			<li>
+				<span>가입일</span><span style='color:red'> *</span>
+			</li>
+			<li>
+				<span>${userData.join_date}</span>
+			</li>
+			<li>
+				<span>닉네임</span>
+			</li>
+			<li>
+				<input type='text' value="${userData.user_nickname }" id='user_nickname' name='user_nickname' disabled/>
+			</li>
+			<li>
+				<span>전화번호</span>
+			</li>
+			<li>
+				<input type='text' value="${userData.tel }" id='tel' name='tel' disabled/>
+			</li>
+			<li>
+				<span>신장</span>
+			</li>
+			<li>
+				<input type='text' value="${userData.height }" id='height' name='height' disabled/>
+			</li>
+			<li>
+				<span>성별</span>
+			</li>
+			<li>
+				<select name='gender' id='gender' disabled>
+					<c:choose>
+						<c:when test="${userData.gender eq 'M' }">
+							<option value = "M" selected>남자</option>
+							<option value = "W">여자</option>				
+						</c:when>
+						<c:when test="${userData.gender eq 'W' }">
+							<option value = "M">남자</option>
+							<option value = "W" selected>여자</option>										
+						</c:when>
+					</c:choose>
+				</select>
+			</li>
+			<li>
+				<span>나이</span>
+			</li>
+			<li>
+				<input type='text' value="${userData.age }" id='age' name='age' disabled/>
+			</li>
+			<li>
+				<input type='button' class='inforDataBtn' value='수정하기' id='updateBtn'>
+				<input type='button' class='inforDataBtn' value='탈퇴하기' id='deleteBtn'>	
+			</li>
+		</ul>	
+	</form>
+</div>

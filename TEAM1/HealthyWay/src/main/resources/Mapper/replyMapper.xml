@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.team1.health.dao.ReplyDAO">
+	<select id="replyList" resultType="com.team1.health.vo.ReplyVO">
+		select reply_num, r.user_id, content, reply_date, user_nickname
+		from reply r inner join user u on r.user_id=u.user_id
+		where board_num=#{param1}
+	</select>
+	
+	<insert id="replyWrite">
+		insert into reply(user_id, content, board_num)
+		values(#{user_id}, #{content}, #{board_num})
+	</insert>
+	
+	<delete id="replyDel">
+		delete from reply
+		where reply_num=#{param1} and user_id=#{user_id}
+	</delete>
+
+  <update id="replyEdit">
+  	update reply set content=#{content} 
+  	where reply_num=${reply_num} and user_id=#{user_id}
+  </update>
+  	
+</mapper>

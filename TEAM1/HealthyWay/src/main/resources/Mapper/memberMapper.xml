@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.team1.health.dao.MemberDAO">
+	<select id="loginCheck" resultType="com.team1.health.vo.MemberVO">
+		select user_id, user_nickname, profie_img from user
+		where user_id=#{user_id} and user_pw=#{user_pw}
+	</select>
+
+	<insert id="memberInsert">
+		insert into user(user_id, user_pw, user_name, tel, user_email, age, user_nickname, gender)
+		values(#{user_id}, #{user_pw}, #{user_name}, #{tel}, #{user_email}, #{age}, #{user_nickname}, #{gender})
+	</insert>
+	<select id="checkId" resultType="String">
+		select user_id from user 
+		where user_id=#{param1}
+	</select>
+	<select id="checkNick" resultType="String">
+		select user_nickname from user
+		where user_nickname=#{user_nickname}
+	</select>
+	<select id="checkTel" resultType="String">
+		select tel from user
+		where tel=#{tel}
+	</select>
+	<select id="checkEmail" resultType="String">
+		select user_email from user
+		where user_email=#{user_email}
+	</select>
+	
+	<!-- 아이디/비밀번호 찾기 -->
+	<select id="findId" resultType="com.team1.health.vo.MemberVO">
+		select user_id from user where user_name=#{user_name} and user_email=#{user_email}
+	</select>
+	<select id="findPw" resultType="com.team1.health.vo.MemberVO">
+		select user_pw from user where user_id=#{user_id} and user_name=#{user_name} and user_email=#{user_email} and tel=#{tel}
+	</select>
+	
+	<!-- 설문조사 -->
+	<update id="memberQuestion">
+		update user set height=#{height}, strength=#{strength}, favorite=#{favorite} where user_id=#{user_id}
+	</update>
+	<insert id="weightInsert">
+		insert into weigth (user_id, weight)
+		values (#{user_id}, #{weight})
+	</insert>
+	<select id="memberQuestionSelect" resultType="com.team1.health.vo.MemberVO">
+		SELECT a.height, a.strength, a.favorite, b.weight
+		FROM user AS a
+		JOIN weigth AS b
+		ON a.user_id = b.user_id
+		WHERE b.user_id = #{user_id}
+		ORDER BY b.write_date desc limit 1
+	</select>
+</mapper>

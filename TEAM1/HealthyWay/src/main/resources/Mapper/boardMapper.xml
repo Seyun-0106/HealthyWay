@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.health.dao.BoardDAO">
+	<insert id="boardInsert">
+		insert into board(user_id, title, content, type_num)
+		values(#{user_id}, #{title}, #{content}, #{type_num})
+	</insert>
+	
+	<select id="boardList" resultType="com.team1.health.vo.BoardVO">
+		select board_num, user_id, title, hit, date_format(write_date,'%m-%d %H:%i') write_date
+		from board where type_num=4
+		<if test="searchWord != null">
+		and ${searchKey} like '%${searchWord}%'
+		</if>
+		order by board_num desc limit ${onePageRecord} offset ${offsetIndex}
+	</select>
+	
+	<select id="totalRecord" resultType="int">
+	select count(board_num) cnt from board where type_num=4
+		<if test='searchWord != null'>
+  			and ${searchKey} like '%${searchWord}%'
+  		</if>
+	</select>
+	 <select id="boardSelectAll" resultType="com.team1.health.vo.BoardVO">
+  		select board_num, user_id, title, hit, date_format(write_date,'%y-%m-%d %H:%i') write_date
+  		from board where type_num=4
+  		<if test='user_id != null' >
+  			and user_id=#{user_id}
+  		</if>
+  		<if test='searchWord != null'>
+  			and title like '%${searchWord}%'
+  		</if>
+  		order by board_num desc, no desc 
+  		limit ${onePageRecord} offset ${offsetIndex}
+  	</select>
+	
+
+	
+	<select id="boardSelectByNo" resultType="com.team1.health.vo.BoardVO">
+  		select board_num, user_id, title, content, date_format(write_date,'%y-%m-%d %H:%i') write_date
+  		from board where board_num=${board_num}
+  	</select>
+  	
+	<select id="boardSelect" resultType="com.team1.health.vo.BoardVO">
+		select board_num, b.user_id, title, content, hit, date_format(write_date, '%Y. %m. %d') write_date, profie_img
+		from board b left join user u on b.user_id=u.user_id
+		where board_num=${param1}
+	</select>
+	
+	<update id="hitCount">
+		update board set hit = hit+1 where board_num=${param1}
+	</update>
+	
+	<update id="boardUpdate">
+		update board set title=#{title}, content=#{content} 
+		where board_num=${board_num} and user_id=#{user_id}
+	</update>
+	
+	<delete id="boardDelete">
+		delete from board where board_num=#{param1} and user_id=#{param2}
+	</delete>
+
+
+	<insert id="suggestionInsert">
+		insert into board(user_id, title, content, type_num)
+		values(#{user_id}, #{title}, #{content}, #{type_num})
+	</insert>
+
+	<select id="suggestionList" resultType="com.team1.health.vo.BoardVO">
+		select board_num, user_id, title, hit, date_format(write_date,'%m-%d %H:%i') write_date
+		from board where type_num=5
+		<if test="searchWord != null">
+			and ${searchKey} like '%${searchWord}%'
+		</if>
+		order by board_num desc limit ${onePageRecord} offset ${offsetIndex}
+	</select>
+	
+	<select id="SuggestiontotalRecord" resultType="int">
+		select count(board_num) cnt from board where type_num=5
+		<if test="searchWord != null">
+			and ${searchKey} like '%${searchWord}%'
+		</if>
+	</select>
+	
+	<select id="suggestionSelectByNo" resultType="com.team1.health.vo.BoardVO">
+  		select board_num, b.user_id, title, content, hit, date_format(write_date, '%Y. %m. %d') write_date, profie_img
+		from board b left join user u on b.user_id=u.user_id
+  		where board_num=${board_num}
+  	</select>
+  	
+	<select id="suggestionSelect" resultType="com.team1.health.vo.BoardVO">
+		select board_num, user_id, title, content, hit, write_date
+		from board where board_num=${param1}
+	</select>
+  
+	<select id="suggestionSelectAll" resultType="com.team1.health.vo.BoardVO">
+  		select board_num, user_id, title, hit, date_format(write_date,'%y-%m-%d %H:%i') write_date
+  		from board where type_num=5
+  		<if test='user_id != null' >
+  			and user_id=#{user_id}
+  		</if>
+  		<if test='searchWord != null'>
+  			and title like '%${searchWord}%'
+  		</if>
+  		order by board_num desc, no desc 
+  		limit ${onePageRecord} offset ${offsetIndex}
+  	</select>
+	
+	<update id="suggestionUpdate">
+		update board set title=#{title}, content=#{content} 
+		where board_num=${board_num} and user_id=#{user_id}
+	</update>
+	
+	<delete id="suggestionDelete">
+		delete from board 
+		where board_num=#{param1} and user_id=#{param2}
+	</delete>
+	
+	<insert id="insertBoardReply">
+		insert into reply(user_id, board_num, content) values(#{user_id}, ${board_num}, #{content})
+	</insert>
+	
+	<delete id="deleteBoardReply">
+		delete from reply where reply_num=${param1}
+	</delete>
+	
+	<update id="updateBoardReply">
+		update reply set content=#{content} where reply_num=${reply_num} and board_num=${board_num}
+	</update>
+	
+	<select id="replyBoardList" resultType="com.team1.health.vo.ReplyVO">
+		select reply_num, user_id, board_num, content, date_format(reply_date, '%Y-%m-%d %H:%i') reply_date
+		from reply where board_num=${param1}
+	</select>
+
+
+	<insert id="acheiveInsert">
+		insert into achieve_story(board_num, img_file1, img_file2) 
+		values((select board_num from board where title=#{title} and user_id=#{user_id} and content=#{content}), #{img_file1}, #{img_file2})
+	</insert>
+	
+	<select id="successList" resultType="com.team1.health.vo.BoardVO">
+        select b.board_num, user_id, title, hit, date_format(write_date,'%m-%d %H:%i') write_date, img_file1, img_file2
+		from board b inner join achieve_story a on b.board_num=a.board_num
+		where type_num=3
+        <if test="searchWord != null">
+			and (title like '%${searchWord}%' or content like '%${searchWord}%' or user_id like '%${searchWord}%')
+		</if>
+        order by board_num desc
+    </select>
+
+	<select id="successtotalRecord" resultType="int">
+		select count(board_num) cnt from board where type_num=3
+		<if	test='searchWord != null'>
+			and (title like '%${searchWord}%' or content like '%${searchWord}%' or user_id like '%${searchWord}%')
+		</if>
+	</select>
+	
+	<select id="successView" resultType="com.team1.health.vo.BoardVO">
+  		select b.board_num, b.user_id, title, content, date_format(write_date,'%y-%m-%d %H:%i') write_date, img_file1, img_file2, profie_img
+		from board b inner join achieve_story a on b.board_num=a.board_num
+		left join user u on b.user_id=u.user_id
+		where b.board_num=${param1}
+  	</select>
+	
+	<update id="successUpdate">
+		update board set title=#{title}, content=#{content} 
+		where board_num=${board_num} and user_id=#{user_id}
+	</update>
+	
+	<update id="achieveUpdate">
+		update achieve_story set img_file1=#{img_file1}, img_file2=#{img_file2}
+		where board_num=#{board_num}
+	</update>
+	
+	<delete id="successDelete">
+		delete from board 
+		where board_num=#{param1} and user_id=#{param2}
+	</delete>
+</mapper>

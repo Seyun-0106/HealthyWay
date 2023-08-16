@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.health.dao.MyPageDAO">
+	<select id='userData' resultType='MemberVO'>
+		select user_id,user_pw,user_email,user_name,user_nickname,
+		tel,user_authority,profie_img,report_hit,height,DATE_FORMAT(join_date,'%Y-%m-%d') 
+		as join_date,gender,age 
+		from user where user_id=#{param1};
+	</select>
+	<select id='PTboard' resultType='BoardVO'>
+		select b.board_num, b.title,b.content,p.pt_img_file from board b 
+		join PT_group p on b.board_num=p.board_num 
+		where b.user_id=#{param1} and b.type_num=2;
+	</select>
+	<update id="userUpdate">
+		update user set user_nickname=#{user_nickname}, tel=#{tel}, height=#{height}, 
+		gender=#{gender}, age=#{age}, profie_img=#{profie_img} where user_id=#{user_id};
+	</update>
+	<delete id="userDelete">
+		delete from user where user_id=#{param1};
+	</delete>
+	<select id="recipeHeart" resultType='BoardVO'>
+		select b.board_num,b.user_id,content,title,total_kcal,recipe_img_file from board b join heart h on b.board_num=h.board_num 
+		join recipe_board r on b.board_num=r.board_num where h.user_id=#{param1};
+	</select>
+	<select id="reciepeInfor" resultType='BoardVO'>
+		select b.board_num,b.user_id,content,title,total_kcal,recipe_img_file from board b join heart h on b.board_num=h.board_num 
+		join recipe_board r on b.board_num=r.board_num where b.board_num=#{param1} and h.user_id=#{param2};
+	</select>
+	<delete id='reciepeHeartDel'>
+		delete from heart where board_num=${param1} and user_id=#{param2};
+	</delete>
+	<select id="groupListAll" resultType='BoardVO'>
+		select b.board_num,b.title,b.content,p.pt_img_file from board b 
+		join PT_group p on b.board_num=p.board_num 
+		left join apply_user a on p.board_num=a.board_num
+		where (a.user_id=#{param1} and a.user_state='참여중') or (b.user_id=#{param1} and b.type_num='2')
+		ORDER BY b.board_num DESC
+		limit ${param2.onePageRecord} offset ${param2.offsetIndex};
+	</select>
+	<select id='groupCount' resultType='int'>
+		select count(b.board_num) from board b 
+		join PT_group p on b.board_num=p.board_num 
+		left join apply_user a on p.board_num=a.board_num 
+		where (a.user_id=#{param1} and a.user_state='참여중') or (b.user_id=#{param1} and b.type_num='2');
+	</select>
+	<select id='achieveCount' resultType='int'>
+		select count(board_num) from board where user_id=#{param1} and type_num=3;
+	</select>
+	<select id='achieveListAll' resultType='BoardVO'>
+		select a.img_file1,b.board_num,b.title,b.content from board b join achieve_story a on b.board_num=a.board_num where user_id=#{param1} 
+		ORDER BY b.board_num DESC
+		limit ${param2.onePageRecord} offset ${param2.offsetIndex};
+	</select>
+	<select id='foodCount' resultType='int'>
+		select count(board_num) from board where user_id=#{param1} and type_num=1 and board_num!=0;
+	</select>
+	<select id='foodListAll' resultType='BoardVO'>
+		select r.recipe_img_file,b.board_num,b.title,b.content from board b join recipe_board r on b.board_num=r.board_num where b.user_id=#{param1} 
+		ORDER BY b.board_num DESC
+		limit ${param2.onePageRecord} offset ${param2.offsetIndex};
+	</select>
+	<select id='userRoutineListAll' resultType='TrainVO'>
+		select ur.user_id,ur.train_num,tr.train_title from user_routine ur join training_routine tr on tr.train_num=ur.train_num where ur.user_id=#{param1};
+	</select>
+	<select id='trainModuleListAll' resultType='TrainVO'>
+		select m.module_img, tm.train_num,m.module_content,m.module_title from training_routine tr 
+		join training_module tm on tr.train_num=tm.train_num join module m on tm.module_num=m.module_num
+		<where>
+			<foreach item="item" index="index" collection="trainNum"
+        		open="tr.train_num in (" separator="," close=")">
+          		#{item}
+    		</foreach>
+  		</where>
+	</select>
+	<select id='weightAll' resultType='MemberVO'>
+		select weight,DATE_FORMAT(write_date,'%y.%m.%d') as write_date_print from weigth where user_id=#{param1} order by write_date desc limit 10;
+	</select>
+	<select id='barListAll' resultType='CountVO'>
+		select utc.user_id,utc.train_year,utc.train_month,round(utc.train_count/60) as train_count,utc.module_title,utc.write_date from user_training_count utc 
+		where utc.user_id=#{param1} and utc.train_year=#{param2};
+	</select>
+</mapper>

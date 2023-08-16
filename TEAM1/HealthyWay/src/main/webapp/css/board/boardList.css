@@ -1,0 +1,275 @@
+@charset "UTF-8";
+
+.top_img_wrap{
+	width: 100%;
+	height: 500px;
+}
+
+
+.top_img_wrap img{
+	width: 100%;
+	height: 100%;
+}
+
+.wrap{
+	display: flex;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 4%;
+}
+/***************************************************************/
+/* 메뉴 */
+.menu_wrap{
+    width: 17%;
+    margin-right: 30px;
+}
+
+.menu_list{
+	width: 100%;
+	background-color: rgba(249, 247, 253);
+    padding-bottom: 70px;
+    position: sticky;
+    top: 10%;
+}
+
+.menu_list li{
+	margin: 0 20px;
+	height: 50px;
+	line-height: 50px;
+}
+
+.menu_list li:first-child{
+	height: 50px;
+	line-height: 50px;
+	background-color: #FF5454;
+	font-size: 1.5em;
+    color: #fff;
+    font-weight: bold;
+    margin: 0;
+    padding: 20px;
+    margin-bottom: 50px;
+}
+
+.menu_list li:not(:first-child){
+	border-bottom: 1px solid #dbdbdb;
+    margin-top: 15px;
+    font-weight: 500;
+    color: #292929;
+}
+
+.selected_menu{
+	display: flex;
+}
+
+.selected_menu .selected{
+	flex: 1;
+}
+
+.selected a{
+	color: #FF5454;
+}
+
+.selected_menu span{
+	font-size: 16px;
+	color: #FF5454;
+}
+
+/***************************************************************/
+/* 메인 */
+.main_wrap{
+    width: 83%;
+    color: #292929;
+}
+
+.main_wrap h1{
+    border-bottom: 6px solid #f3f3f3;
+    padding-bottom: 20px;
+}
+
+.search_wrap{
+	width: 100%;
+}
+
+#searchFrm{
+	text-align: right;
+	margin-right: 3%;
+}
+
+.search_cate{
+	width: 90px;
+    height: 35px;
+    border: solid 1.5px #d3d3d3;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+#searchWord{
+	width: 300px;
+    height: 22px;
+    border: solid 1.5px #d3d3d3;
+    border-radius: 4px;
+    padding: 5px 10px;
+}
+
+.search_btn{
+   	font-size: 13px;
+    width: 75px;
+    height: 35px;
+    border: solid 1.5px #d3d3d3;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+#searchWord:focus{
+	outline: none;
+}
+
+.notice_list{
+	overflow: auto;
+	margin-top: 20px;
+}
+
+.notice_list li{
+	float: left;
+	width: 10%;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #d3d3d3;
+}
+
+.notice_list li:nth-child(-n+5){
+	background-color: #f3f3f3;
+	border-top: 1.5px solid #d3d3d3;
+	border-bottom: 1.5px solid #d3d3d3;
+}
+
+.notice_list li:nth-child(5n+1) img{
+	width: 20%;
+	vertical-align: middle;
+}
+
+.notice_list li:nth-child(5n+3){
+	width: 55%;
+}
+
+.notice_list li:nth-child(5n+5){
+	width: 15%;
+}
+
+.writeBtn_wrap{
+	width: 97%;
+	text-align: right;
+	margin-right: 3%;
+	margin-top: 20px;
+}
+
+.writeBtn_wrap button{
+	background-color: #FF5454;
+    color: #fff;
+    padding: 5px 20px;
+    border: 1.5px solid #ff5454;
+    border-radius: 4px;
+    height: 33px;
+    cursor: pointer;
+}
+/***************************************************************/
+/* 페이징 */
+.paging_wrap{
+	overflow: auto;
+	display: flex;
+}
+
+.paging {
+	overflow: auto;
+	margin: 0 auto;
+}
+
+.paging li{
+	float: left;
+    padding: 10px;
+    text-align: center;
+    width: 10px;
+    height: 10px;
+    line-height: 10px;
+    font-size: 1.05em;
+}
+
+@media ( min-width: 1800px ) {	
+	.notice_list li:nth-child(5n+1) img{
+		width: 15%;
+	}
+}
+
+
+/***************************************************/
+/* 성공스토리 */
+
+.all_post_wrap{
+	margin-top: 20px;	
+}
+
+.all_post_wrap ul{
+	overflow: auto;
+}
+
+.all_post_wrap li{
+	float: left;
+	margin: 20px;
+	width: 29%;
+	cursor: pointer;
+}
+
+.post_wrap{
+    overflow: hidden;
+    width: 100%;
+    height: 400px;
+    border: 1.5px solid #ddd;
+}
+
+.img_wrap{
+    width: 100%;
+    height: 300px;
+    border-bottom: 1.5px solid #ddd;
+    overflow: hidden;
+    display: flex;
+}
+
+.before_img,
+.after_img{
+	width: 50%;
+}
+
+.before_img img,
+.after_img img{
+	width: 100%;
+	height: 100%;
+}
+
+.title{
+	height: 50px;
+    line-height: 50px;
+    font-size: 1.3em;
+    padding: 10px 20px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hit_date_wrap{
+    display: flex;
+    padding: 0 20px;
+    color: gray;
+    font-size: 14px;
+}
+
+.hit,
+.date{
+	width: 50%;
+}
+
+.date{
+	text-align: right;
+}

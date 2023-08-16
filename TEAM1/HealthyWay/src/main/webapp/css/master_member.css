@@ -1,0 +1,155 @@
+@charset "UTF-8";
+/*a태그 설정*/
+a:link {
+   color: black;
+   text-decoration: none;
+}
+
+a:visited {
+   color: black;
+   text-decoration: none;
+}
+
+a:hover {
+   color: black;
+   text-decoration: none;
+}
+
+@font-face {
+   font-family: 'NanumBarunGothic';
+   font-style: normal;
+   font-weight: 400;
+   src:
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+   src:
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix')
+      format('embedded-opentype'),
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff')
+      format('woff'),
+      url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf')
+      format('truetype');
+}
+
+body {
+   font-family: "NanumBarunGothic";
+}
+ul, li {
+   margin: 0;
+   padding: 0;
+   list-style: none;
+}
+
+#container{
+   margin:4%;
+   padding-top:1%;
+   padding-left:4%;
+   padding-right:4%;
+}
+/*검색창*/
+#searchFrm{
+   overflow:auto;
+   width:385px;
+   margin-right:2%;
+   float:right;
+}
+#searchFrm>input[type=text]{
+   width:300px;
+   height:30px;
+   padding-left:5px;
+   border-radius:10px;
+   border:1px solid rgb(200,200,200);
+}
+#searchFrm>input[type=text]:focus{
+   outline-color: #FF5454;
+}
+#searchFrm>input[type=submit]{
+   width:75px;
+   height:30px;
+   margin-left:5px;
+   border-radius: 30px;
+   border:none;
+   background-color: #FF5454;
+   color:white;
+}
+.menu_list {
+   text-align: right;
+}
+.menu_list>li {
+    float: left;
+    width: 24.77%;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid #E4E5E5;
+    border-bottom: 1px solid gray;
+    border-left: none;
+    background-color: #FCFCFC;
+    cursor: pointer;
+    color: gray;
+}
+
+.menu_active {
+   border: 1px solid gray !important;
+   border-bottom: none !important;
+   background-color: #fff !important;
+   color: #000 !important;
+}
+.table{
+   text-align: center;
+}
+.table>tbody>tr{
+   cursor: pointer;
+   overflow:hidden;
+   text-overflow:ellipsis;
+   white-space:nowrap;
+}
+
+#deletBtn{
+   width:75px;
+   height:30px;
+   border-radius: 30px;
+   border:none;
+   background-color: #FF5454;
+   color:white;
+}
+#warnBtn{
+   width:75px;
+   height:30px;
+   border-radius: 30px;
+   border: 1px solid rgb(200,191,231);
+   background-color:white;
+}
+.paging{
+   text-align: center;
+   margin:0 auto;
+   margin-top:3%;
+   width:85%;
+   height:27px;
+}
+.paging>li{
+   display:inline-block;
+   width:2%;
+   height:27px;
+   line-height:30px;
+   height:100%;
+   text-align:center;
+   font-size:16px;
+   margin-right:0.1%;
+   border-radius:10px;
+   background-color: rgb(235,235,235);
+}
+.active, .active>a{
+   color:white;
+   background-color:#FF5454 !important;
+}
+
+@media ( min-width: 1800px ) {
+   #container{
+      padding-left:7%;
+      padding-right:7%;
+   }
+   #searchFrm{
+      width:20%;
+      margin-right:1%;
+   }
+}

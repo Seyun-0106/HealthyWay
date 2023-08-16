@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team1.health.dao.AdminDAO">
+   <!-- 회원 관리 -->
+   <select id="memberList" resultType="com.team1.health.vo.MemberVO">
+      select user_id, user_pw, user_email, user_name, user_nickname, tel, gender, age
+      from user
+      <if test="searchWord != null">
+         where user_id like '%${searchWord}%' or user_pw like '%${searchWord}%' or user_email like '%${searchWord}%'
+         or user_name like '%${searchWord}%' or user_nickname like '%${searchWord}%' or tel like '%${searchWord}%'
+         or gender like '%${searchWord}%' or age like '%${searchWord}%'
+      </if>
+      order by join_date desc limit ${onePageRecord} offset ${offsetIndex}
+   </select>
+   
+   <select id="totalRecord1" resultType="int">
+      select count(user_id) from user
+      <if test='searchWord != null'>
+         where user_id like '%${searchWord}%' or user_pw like '%${searchWord}%' or user_email like '%${searchWord}%'
+         or user_name like '%${searchWord}%' or user_nickname like '%${searchWord}%' or tel like '%${searchWord}%'
+         or gender like '%${searchWord}%' or age like '%${searchWord}%'
+      </if>
+   </select>
+   
+   <delete id="memberDelete">
+      delete from user where user_id=#{param1}
+   </delete>
+   
+   <!-- 신고 회원 -->
+   <select id="memberReportList" resultType="com.team1.health.vo.MemberVO">
+      select user_id, user_pw, user_email, user_name, user_nickname, tel, report_hit, warning_state
+      from user where report_hit>0 and warning_state='N'
+      order by join_date desc limit ${onePageRecord} offset ${offsetIndex}
+   </select>
+   
+   <select id="totalReport" resultType="int">
+      select count(user_id) from user where report_hit>0 and warning_state='N'
+   </select>
+   
+   <!-- 레시피 관리 -->
+   <select id="lastIngred" resultType="String">
+      select gred_num from ingredient order by gred_num desc limit 1;
+   </select>
+   <insert id="ingredInsert">
+      insert into ingredient(gred_num, gred_type, gred_kcal, gred_name)
+      values(#{gred_num}, #{gred_type}, ${gred_kcal}, #{gred_name})
+   </insert>
+   
+   <delete id="ingredDelete">
+      delete from ingredient where gred_num=#{param1}
+   </delete>
+   
+   
+   
+   
+   <!-- pt 그룹 관리 -->
+   <select id="ptList" resultType="com.team1.health.vo.BoardVO">
+      select b.board_num, user_id, title, b.content, date_format(write_date, '%Y-%m-%d') write_date, state, start_date, end_date, max_user, pNum
+      from board b inner join PT_group p on b.board_num=p.board_num
+      left join (select board_num, count(*) pNum from apply_user where user_state="참여중" group by board_num) n on b.board_num=n.board_num
+      where type_num=2
+      <if test="searchWord != null">
+         and ( b.user_id like '%${searchWord}%' or b.title like '%${searchWord}%' or b.content like '%${searchWord}%'
+         or p.state like '%${searchWord}%')
+      </if>
+      order by b.board_num desc limit ${onePageRecord} offset ${offsetIndex}
+   </select>
+   
+   <select id="totalRecord2" resultType="int">
+      select count(b.board_num) from board b inner join PT_group p on b.board_num=p.board_num
+      <if test='searchWord != null'>
+         and (b.user_id like '%${searchWord}%' or b.title like '%${searchWord}%' or b.content like '%${searchWord}%'
+         or p.state like '%${searchWord}%')
+      </if>
+   </select>
+   
+   
+   <!-- board관련 공통 코드 -->
+   <delete id="boardDelete">
+      delete from board where board_num=${param1}
+   </delete>
+   <insert id="boardInsert">
+		insert into board(user_id, title, content, type_num)
+		values(#{user_id}, #{title}, #{content}, #{type_num})
+	</insert>
+   
+   <select id="noticeList" resultType="com.team1.health.vo.BoardVO">
+		select board_num, user_id, title, hit, date_format(write_date,'%Y-%m-%d') write_date, type_num
+      	from board where type_num=4
+		order by board_num desc limit ${onePageRecord} offset ${offsetIndex}
+	</select>
+   	<select id="totalNoticeRecord" resultType="int">
+   		 select count(board_num) from board
+   	 	 where type_num=4
+   	</select>
+   
+   <!-- 커뮤니티 관리 -->
+   <select id="boardList" resultType="com.team1.health.vo.BoardVO">
+      select board_num, user_id, title, hit, date_format(write_date,'%Y-%m-%d') write_date, type_num
+      from board 
+      <if test='searchKey==null or searchKey==""'>
+         where (type_num=3 or type_num=5)
+      </if>
+      <if test='searchKey=="자유게시판"'>
+         where type_num=5
+      </if>
+      <if test='searchKey=="성공스토리"'>
+         where type_num=3
+      </if>
+      <if test="searchWord != null">
+         and (title like '%${searchWord}%' or write_date like '%${searchWord}%' or user_id like '%${searchWord}%')
+      </if>
+      order by board_num desc limit ${onePageRecord} offset ${offsetIndex}
+   </select>
+   
+   <select id="totalRecord3" resultType="int">
+      select count(board_num) from board
+      <if test='searchKey==null or searchKey==""'>
+         where (type_num=3 or type_num=5)
+      </if>
+      <if test='searchKey=="자유게시판"'>
+         where type_num=5
+      </if>
+      <if test='searchKey=="성공스토리"'>
+         where type_num=3
+      </if>
+      <if test="searchWord != null">
+         and (title like '%${searchWord}%' or write_date like '%${searchWord}%' or user_id like '%${searchWord}%')
+      </if>
+   </select>
+   
+   
+   <!-- 신고 관리 -->
+   <select id="reportList" resultType="com.team1.health.vo.ReportVO">
+      select r.report_num, b.board_num, b.user_id as write_id, r.user_id, r.report_title, r.report_content, r.report_write_date, r.report_type
+      from board b inner join report r on b.board_num=r.board_num
+      <if test="searchKey=='레시피'">
+         where r.report_type = 1
+      </if>
+      <if test="searchKey=='PT그룹'">
+         where r.report_type = 2
+      </if>
+      <if test="searchKey=='성공스토리'">
+         where r.report_type = 3
+      </if>
+      <if test="searchKey=='자유게시판'">
+         where r.report_type = 5
+      </if>
+      order by r.report_write_date desc limit ${onePageRecord} offset ${offsetIndex}
+   </select>
+   
+   <select id="totalRecord4" resultType="int">
+      select count(report_num) from report
+      <if test="searchKey=='레시피'">
+         where report_type = 1
+      </if>
+      <if test="searchKey=='PT그룹'">
+         where report_type = 2
+      </if>
+      <if test="searchKey=='성공스토리'">
+         where report_type = 3
+      </if>
+      <if test="searchKey=='자유게시판'">
+         where report_type = 5
+      </if>
+   </select>
+   
+   <insert id='reportInsert'>
+      insert into report(board_num, user_id, report_title, report_content, report_type) 
+      values(${board_num}, #{user_id}, #{report_title}, #{report_content}, ${report_type})
+   </insert>
+   
+   <update id="userReportCount">
+      update user set report_hit=report_hit+1, warning_state="N" where user_id=#{param1}
+   </update>
+   
+   <update id="warningState">
+      update user set warning_state=#{param1} where user_id=#{param2}
+   </update>
+   <delete id="reportDelete">
+      delete from report where report_num=#{param1}
+   </delete>
+   
+   
+   
+</mapper>

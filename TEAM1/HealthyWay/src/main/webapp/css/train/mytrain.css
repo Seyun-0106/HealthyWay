@@ -1,0 +1,105 @@
+@charset "UTF-8";
+
+#menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: rgba(249, 247, 253);
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+.li-a {
+   display: block;
+   color: #000;
+   margin: 10px;
+   padding: 8px 16px;
+   text-decoration: none;
+   width: 180px;
+}
+
+.li-a:hover{
+  background-color: rgba(255, 75, 85);
+  color: white;
+}
+
+.active  {
+   background-color: rgba(255, 75, 85);
+   color: white;
+   display: block;
+   margin: 10px;
+   padding: 8px 16px;
+   text-decoration: none;
+   width: 180px;
+}
+
+
+
+/* mytrain css start */
+
+.mytrain-frm {
+	margin: 0px 0px 0px 20%;
+}
+
+.mytrain-frm ul{
+    list-style: none;
+    display: inline-block;
+}
+.mytrain-frm li {
+	float: left;
+    margin-left: 10px;
+	margin-top: 10px;
+}
+
+.mytrain-frm li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  width: 180px;
+}
+
+.my_trainList li {
+	border: 0.5px solid lightgray;
+    float: left;
+    margin: 0px 10px 20px 0px;
+    padding: 0px 30px 10px 15px;
+    border-radius: 4px;
+    width: 185px;
+}
+.my_trainList img {
+    width: 180px;
+    height: 150px;
+    margin-top: 0px;
+}
+
+.my_trainList li:hover {
+	box-shadow: 0.5px 1px 0.5px 1px lightgray;
+	background-color: rgba(249, 247, 253);
+	border: 0.5px solid rgba(249, 247, 253);
+}
+
+.my_trainList li a {
+	padding: 15px 0px 0px 0px;
+}
+
+.my_trainList li a img{
+	height: 180px;
+}
+
+.del-btn {
+   height: 35px;
+   width: 120px;
+   border-radius: 4px;
+   border: none;
+   background-color: rgba(255, 75, 85);
+   color: white;
+}
+.my-list {
+	height: 300px;
+}
+.my-list-div {
+	margin-bottom: 60px;
+}

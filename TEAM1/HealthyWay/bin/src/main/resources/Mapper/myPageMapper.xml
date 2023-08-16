@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.health.dao.MyPageDAO">
+	<select id='userData' resultType='MemberVO'>
+		select user_id,user_pw,user_email,user_name,user_nickname,
+		tel,user_authority,profie_img,report_hit,height,DATE_FORMAT(join_date,'%Y-%m-%d') as join_date,gender,age 
+		from user where user_id=#{param1};
+	</select>
+	<select id='PTboard' resultType='BoardVO'>
+		select b.title,b.content,p.pt_img_file from board b 
+		join PT_group p on b.board_num=p.board_num 
+		join apply_user a on p.board_num=a.board_num 
+		where a.user_id=#{param1} and a.user_state='참여중';
+	</select>
+	<update id="userUpdate">
+		update user set user_nickname=#{user_nickname}, tel=#{tel}, height=#{height}, 
+		gender=#{gender}, age=#{age}, profie_img=#{profie_img} where user_id=#{user_id};
+	</update>
+	<delete id="userDelete">
+		delete from user where user_id=#{param1};
+	</delete>
+</mapper>

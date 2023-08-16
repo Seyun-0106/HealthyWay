@@ -1,0 +1,35 @@
+server: 
+  port: 8088
+  # application.properties
+  ssl:
+    key-store: health-key.p12
+    key-store-type: PKCS12
+    key-store-password: root1234
+    key-alias: health
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  datasource: #마이바티스
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://database-2.cyojunwswbmr.us-east-1.rds.amazonaws.com/healthDB?characterEncoding=UTF-8
+    username: power
+    password: root1234
+
+
+  devtools: #자동실행
+    livereload:
+      enabled: true
+      
+  servlet:  #multipart
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+      
+mybatis:
+  type-aliases-package: com.team1.health.vo #mybatis에서 패키지 생략 할 수 있도록 설정
+  mapper-locations: mapper/*Mapper.xml #쿼리문 경로 지정x 
+ 
+

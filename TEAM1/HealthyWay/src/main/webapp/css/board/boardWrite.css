@@ -1,0 +1,122 @@
+@charset "UTF-8";
+
+body{
+	background: #fafafa;
+}
+
+.wrap{
+	width: 100%;
+	overflow: hidden;
+}
+
+#writeFrm_wrap{
+	width: 45%;
+	height: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 3% 5%;
+}
+
+#writeFrm select{
+	height: 30px;
+    width: 20%;
+    border: 1px solid #ddd;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+#writeFrm select:focus{
+	outline: none;
+}
+
+#writeFrm #title_wrap{
+	border-bottom: 1px solid #ddd;
+    padding: 40px 0 30px;
+    margin-bottom: 30px;
+}
+
+#writeFrm input[type=text]{
+	border: none;
+    font-size: 2em;
+    font-weight: 400;
+    color: #292929;
+    width: 100%;
+}
+
+#writeFrm input[type=text]:focus,
+#writeFrm textarea:focus{
+	outline: none;
+}
+
+#writeFrm textarea{
+	width: 100%;
+    height: 70vh;
+    border: none;
+    resize: none;
+    line-height: 25px;
+}
+
+.img_wrap{
+	width: 50%;
+	float: left;
+	margin-bottom: 30px;
+}
+
+.img_div{
+	width: 85%;
+	margin: 0 auto;
+	text-align: center;
+	border: 1px solid #ddd;
+	height: 350px;
+	line-height: 350px;
+	color: gray;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.img_div img{
+	height: 100%;
+}
+
+.img_div span{
+	vertical-align: sub;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+.writeBtn_wrap{
+	width: 100%;
+	height: 6vh;
+	line-height: 6vh;
+	text-align: right;
+	background-color: #ddd;
+	position: sticky;
+    bottom: 0;
+}
+
+.writeBtn_wrap input{
+    background-color: #ff4545;
+    margin-right: 2%;
+    border: 1px solid #ff4545;
+    color: #fff;
+    border-radius: 20px;
+    padding: 7px 20px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+@media ( min-width: 1800px ) {	
+	.img_div{
+	    height: 500px;
+    	line-height: 500px;
+    }
+	
+}

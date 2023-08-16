@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+body, ul, li{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.memberForm-body {
+	min-height: 1200px;
+}
+
+.wrap{
+	display: flex;
+}
+
+.memberForm{
+	width: 55%;
+}
+
+.img_wrap{
+	width: 45%;
+}
+
+.img_wrap img{
+	width: 100%;
+}
+
+.memberForm h1{
+	text-align: center;
+	margin: 40px;
+}
+
+#mFrm{
+    width: 450px;
+    margin: 0 auto;
+}
+
+#mFrm li:nth-child(2n+1){
+	margin-top: 10px;
+}
+
+#mFrm li input{
+	width: 90%;
+    height: 40px;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    margin-top: 3px;
+    padding: 0 10px;
+}
+
+#mFrm li input[type=radio]{
+	width: initial;
+	height: initial;
+}
+
+#mFrm li label{
+	margin-right: 20px;
+}
+
+#mFrm li button{
+	width: 94.5%;
+    height: 45px;
+    border: none;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+   	margin-top: 10px;
+}
+
+.check_account{
+    text-align: center;
+    margin-top: 20px;
+    color: gray;
+    font-size: 14px;
+}
+
+.check_account a:link,
+.check_account a:visited{
+	color: gray;
+	text-decoration: none;
+}
+
+.check_account a:hover{
+	text-decoration: underline;
+}

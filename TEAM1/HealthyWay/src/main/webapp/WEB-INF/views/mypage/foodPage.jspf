@@ -1,0 +1,541 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<style>
+	#foodFavorDiv>div:nth-of-type(1){
+		position:relative;
+		height:100px;
+		border-radius:10px;
+		overflow:hidden;
+		width:100%;
+		margin-bottom:10px;
+		float:left;
+		display:inline-block;
+		white-space:nowrap;
+		z-index:3;
+		height:100px;
+		padding-top:10px;
+		padding-left:10px;
+		padding-bottom:10px;
+		box-shadow:0px 0px 5px 0px rgb(196,196,196);
+	}
+	#recipeImage{
+		border-radius:20px;
+		height:550px;
+		width:480px;
+		overflow:hidden;
+	}
+	#recipeImage img{
+		position:relative;
+		left:50%;
+		top:50%;
+		transform:translate(-50%,-50%);
+		height:100%;
+	}
+	.foodDiv{
+		display:inline-block;
+		position:relative;
+		top:0%;
+		left:0px;
+		border-radius:10px;
+		margin:0 auto;
+		margin-right:10px;
+		width:90px;
+		height:90px;
+		box-shadow:1px 1px 5px 1px black;
+		background-size: cover;
+		background-repeat:no-repeat;
+		background-position:center center;
+		transition-duration:0.5s;
+		overflow:hidden;
+	}
+	.foodDiv img{
+		position:relative;
+		left:50%;
+		top:50%;
+		transform:translate(-50%,-50%);
+		height:100%;
+	}
+	.changeSize{
+		width:100px;
+		height:100px;
+		z-index:1;
+	}
+	.foodDiv:hover{
+		box-shadow:1px 1px 10px 1px black;
+	}
+	.foodDiv>div{
+		float:left;
+	}
+	.foodDiv>div:nth-of-type(2){
+		position:relative;
+		padding:20px;
+		width:100%;
+		height:100%;
+		box-sizing:border-box;
+		z-index:2;
+	}
+	.foodDivBack{
+		position:absolute;
+		top:0px;
+		width:100%;
+		height:100%;
+		background:linear-gradient(
+    		to top,
+            rgba(145,141,199, 0.4) 10%,
+            rgba(145,141,199, 0.6) 25%,
+            rgba(145,141,199, 0.7) 50%,
+            rgba(145,141,199, 0.8) 75%,
+            rgba(145,141,199, 0.9) 100%
+            );
+		z-index:1;
+		opacity:0;
+		transition-duration:0.5s;
+	}
+	.hoverEventDiv{
+		position:absolute;
+		top:0px;
+		width:100%;
+		height:100%;
+		z-index:3;
+	}
+	.foodDiv>div>div{
+		position:relative;
+		height:30px;
+		overflow:hidden;
+	}
+	.foodDiv>div>div:nth-of-type(1)>span{
+		position:relative;
+		font-size:0.9em;
+		font-weight:bold;
+		transition-duration:0.5s;
+		top:30px;
+		color:white;	
+	}
+	#kcalDiv{
+		width:100%;
+	}
+	#kcalDiv>div{
+		float:left;
+	}
+	#kcalChk{
+		padding:0px 30px 30px 30px;
+	}
+	#kcalChk>div:nth-of-type(2){
+		/*이미지 들어갈 자리*/
+	}
+	.stopScroll{
+		overflow:hidden !important; 
+		touch-action:none;
+	}
+	#reciepeRight,#reciepeLeft{
+		position:absolute;
+		height:100%;
+		z-index:4;
+		width:25px;
+		border:none;
+		background-color:black;
+		color:white;
+		opacity:0.3;
+		left:0px;
+		cursor:pointer;
+		font-weight:bold;
+	}
+	#reciepeRight:hover,#reciepeLeft:hover{
+		opacity:0.7;
+	}
+	#reciepeRight{
+		top:0%;
+	}
+	#reciepeLeft{
+		top:0%;
+		left:97.4%;
+	}
+	.reciepeInforUl{
+		margin:0px 0px 0px 30px;
+		width:400px;
+	}
+	.reciepeInforUl li{
+		width:100%;
+	}
+	.reciepeInforUl li:nth-of-type(1){
+		font-weight:bold;
+		font-size:1.2em;
+		padding:10px;
+
+	}
+	.reciepeInforUl li:nth-of-type(2){
+		height:300px;
+		border-top:3px solid #ddd;
+		border-bottom:1px solid #ddd;
+	}
+	.reciepeInforUl li:nth-of-type(2) textarea{
+		border:none;
+		width:100%;
+		height:100%;
+		resize:none;
+	}
+	.reciepeInforUl li:nth-of-type(3){
+		border-bottom:3px solid #ddd;
+		height:30px;
+		line-height:30px;
+	}
+	.reciepeInforUl li:nth-of-type(3) span{
+		color:red;
+	}
+	.reciepeInforUl li:nth-of-type(4){
+		height:60px;
+		line-height:60px;
+	}
+	.reciepeInforUl li:nth-of-type(4) button{
+		border:none;
+		border-radius:20px;
+		color:white;
+		background-color:rgb(254,100,99);
+		margin:10px 0px 0px 10px;
+		height:40px;
+		cursor:pointer;
+	}
+	.reciepeInforUl li:nth-of-type(4) button:nth-of-type(1){
+		width:120px;
+	}
+	.reciepeInforUl li:nth-of-type(4) button:nth-of-type(2){
+		width:80px;
+	}
+	.modal{ 
+		position:fixed;
+		width:100%;
+		height:100%;
+		background:rgba(0,0,0,0.8);
+		top:0;
+		left:0;
+		display:none;
+		z-index:8;
+	}
+	.modal_content{
+		width:400px;
+		background:#fff; border-radius:10px;
+		position:relative; top:50%; left:50%;
+		margin-top:-200px; margin-left:-200px;
+		box-sizing:border-box;
+		line-height:23px;
+		z-index:8;
+		padding:50px 0px 0px 0px;
+		text-align:center;
+	}
+	#modalOut{
+		cursor:pointer;
+		position:absolute;
+		top:0px;
+		left:95%;
+	}
+	#calImg{
+		position:absolute;
+		left:50%;
+		top:0%;
+		transform:translate(-50%,-50%);
+		width:80px;
+		height:80px;
+		background:linear-gradient(
+    		to right,
+            rgba(181, 179, 217, 1) 0%,
+            rgb(164,162,208) 20%,
+            rgb(145,141,199) 100%
+            );
+		color:white;
+		line-height:80px;
+		text-align:center;
+		border-radius:50px;
+		font-size:1.5em;
+		font-weight:bold;
+	}
+	#calInputDiv{
+		
+	}
+	#calInputDiv button{
+		border:none;
+		background-color:rgb(254,100,99);
+		border-radius:10px;
+		height:40px;
+		color:white;
+		margin-top:20px;
+		cursor:pointer;
+	}
+	#calInputDiv select{
+		border:none;
+		background-color:#ddd;
+		height:30px;
+		border-radius:15px;
+		width:100px;
+		text-align:center;
+	}
+	#yourWeight{
+		width:40px;
+		text-align:right;
+		border:none;
+	}
+	#calKcalShow, #lessKcalShow{
+		width:100%;
+		height:40px;
+		line-height:40px;
+		color:white;
+		background-color:rgb(12,89,147);
+		
+	}
+	#calResult{
+		width:100%;
+		height:60px;
+		background-color:rgb(253,176,65);
+		border-bottom-left-radius:10px;
+		border-bottom-right-radius:10px;
+		line-height:60px;
+		font-size:1.5em;
+		font-weight:bold;
+	}
+	.rErrorPage{
+		position:absolute;
+		top:350px;
+		width:400px;
+		left:320px;
+		text-align:center;
+	}
+	.rErrorPage span{
+		font-size:1.5em;
+		font-weight:bold;
+	}
+	.rErrorPage button{
+		margin-top:20px;
+		border:1px solid black;
+		background-color:white;
+		height:40px;
+		width:200px;
+		border-radius:20px;
+		cursor:pointer;
+	}.rErrorPage button:hover{
+		border:1px solid rgba(172, 100, 241,1);
+		color:rgba(172, 100, 241,1);
+	}
+</style>
+<script>
+	$(()=>{
+		reciepeHeart();
+	});
+	function modalIn(){
+		$(".modal").fadeIn(300);
+	}
+	function modalOut(){
+		$(".modal").fadeOut(300);
+	}
+	//하루 적정 칼로리 계산 공식
+	let dayKcal=0;
+	function calculationKcal(gender,weight,height,age,ective){
+		if(gender=="W"){
+			if(ective=='비활동적'){
+				pa=1.0;
+			}else if(ective=='저활동적'){
+				pa=1.12;
+			}else if(ective=='활동적'){
+				pa=1.27;
+			}else if(ective=='매우 활동적'){
+				pa=1.45;
+			}
+			dayKcal = 354-6.91*age+pa*(9.36*weight+726*0.01*height)
+			return parseInt(dayKcal)
+			
+		}else if(gender=="M"){
+			if(ective=='비활동적'){
+				pa=1.0;
+			}else if(ective=='저활동적'){
+				pa=1.11;
+			}else if(ective=='활동적'){
+				pa=1.25;
+			}else if(ective=='매우 활동적'){
+				pa=1.48;
+			}
+			dayKcal=662-9.53*age+pa*(15.92*weight+539.6*0.01*height)
+			return dayKcal
+		}
+	}
+	//권장 칼로리 표기
+	let foodKcal;
+	function calKcal(){		
+		let dayKcal = calculationKcal("${userData.gender }",$('#yourWeight').val(),'${userData.height }',${userData.age },$('#activity').val());
+		let lessDayKcal;
+		let calResultView;
+		if($('#mealTime').val()=='아침'){
+			dayKcal = dayKcal/5
+			lessDayKcal = dayKcal-100;
+		}else{
+			dayKcal = dayKcal/5*2
+			lessDayKcal = dayKcal-200;
+		}
+		if(foodKcal<lessDayKcal){
+			calResultView="<span style='color:red;'>열량이 부족해요!!</span>";
+		}else if(foodKcal>=lessDayKcal && foodKcal<=dayKcal){
+			calResultView='<span>딱 좋아요!!</span>';
+		}else{
+			calResultView='<span>열량이 조금 과해 보이네요!!</span>';
+		}
+		
+		$('#calKcalShow').html('권장 칼로리(일반): '+dayKcal.toFixed(1)+'Kcal');
+		$('#lessKcalShow').html('권장 칼로리(저염): '+lessDayKcal.toFixed(1)+'Kcal');
+		$('#calResult').html(calResultView)
+	}
+	//좋아요 식단 삭제
+	function delHeart(){
+		if(confirm('삭제하시겠습니까??')){
+			$.ajax({
+				url:"/mypage/heart",
+				type:'delete',
+				data:{
+					'board_num':$('#foodNum'+recipeIdx).attr('value')
+				},
+				success:function(r){
+					if(r>=1){
+						alert('좋아요 취소!!!!');
+						calKcal();
+						recipeIdx=0;
+						reciepeHeart();
+					}
+				}
+			})
+		}
+	}
+	let recipeTop=0;
+	let recipeIdx=0;
+	let foodDivLength=0;
+	//레시피 클릭 이벤트
+	function reciepeClick(index){
+		$("#foodDiv"+recipeIdx).removeClass('changeSize');
+		recipeIdx=index;
+		reciepeInfor(recipeIdx)
+		recipeTop=-100*index;
+		$("#foodDiv"+recipeIdx).addClass('changeSize');
+		$(".foodDiv").css('left',recipeTop+'px');
+	}
+	//레시피 방향키 이벤트
+	function reciepeMove(direction){	
+		if(direction=="left" && recipeIdx<foodDivLength){
+			$("#foodDiv"+recipeIdx).removeClass('changeSize');
+			recipeIdx+=1;
+			reciepeInfor(recipeIdx)
+			recipeTop += -100;
+			$("#foodDiv"+recipeIdx).addClass('changeSize');
+			$(".foodDiv").css('left',recipeTop+'px');
+		}else if(direction=="right" && recipeIdx>0){
+			$("#foodDiv"+recipeIdx).removeClass('changeSize');
+			recipeIdx--;
+			reciepeInfor(recipeIdx);
+			recipeTop+=100;
+			$(".foodDiv").css('left',recipeTop+'px');
+			$("#foodDiv"+recipeIdx).addClass('changeSize');
+		}
+	}
+	//레시피 정보 나오게 하는 ajax
+	function reciepeInfor(recipeIdx){
+		$.ajax({
+			url:"/mypage/reciepeInfor",
+			type:'post',
+			data:{
+				'board_num':$('#foodNum'+recipeIdx).attr('value')
+			},
+			success:function(r){
+				var reciepeInforHtml="";
+				reciepeInforHtml+="<ul class='reciepeInforUl'>";
+				reciepeInforHtml+="<li>"+r.title+"</li>";
+				reciepeInforHtml+="<li><textarea readonly>"+r.content+"</textarea></li>";
+				reciepeInforHtml+="<li><span>칼로리: </span>"+r.total_kcal+"Kcal</li>"
+				reciepeInforHtml+="<li><button onclick='modalIn()'>칼로리 체크!</button><button onclick='delHeart()'>삭제</button></li>"
+				reciepeInforHtml+="</ul>";
+				$("#recipeInfor").html(reciepeInforHtml);
+				$('#recipeImage img').attr('src',"/recipeImg/upload/"+r.recipe_img_file)
+				document.getElementById("recipeImage").addEventListener('click',function(){
+					location.href="/recipe/view?board_num="+r.board_num;
+				});
+				foodKcal=r.total_kcal;
+			},error:function(){
+				var reciepeInforHtml="";
+				reciepeInforHtml+="<div class='rErrorPage'>";
+				reciepeInforHtml+="<span>등록된 레시피가 없습니다!</span><br/>";
+				reciepeInforHtml+="<button onclick='errorMove()'>레시피 구경하러 가기</button>";
+				reciepeInforHtml+="</div>";
+				$("#recipeInfor").html(reciepeInforHtml);
+				$('#reciepeLeft, #reciepeRight').css('display','none');
+			}
+		})
+	}
+	//레시피로 이동
+	function errorMove(){
+		location.href='/recipe/main';
+	}
+	//레시피 목록 나오게 하는 ajax
+	const left="left";
+	const right="right";
+	function reciepeHeart(){
+		$.ajax({
+			url:"/mypage/reciepeHeart",
+			type:'post',
+			success:function(result){
+				$('#reciepeLeft, #reciepeRight').css('display','block');
+				var reciepeHtml="";
+				reciepeHtml+="<button onclick='reciepeMove("+left+")' id='reciepeLeft'>></button>";
+				$(result).each(function(idx,vo){
+					reciepeHtml+="<div onclick='reciepeClick("+idx+")' class='foodDiv' id='foodDiv"+idx+"'>";
+					reciepeHtml+="<img src='/recipeImg/upload/"+vo.recipe_img_file+"'/>";
+					reciepeHtml+="<input type='hidden' id='foodNum"+idx+"' value='"+vo.board_num+"'/>"
+					reciepeHtml+="<div class='hoverEventDiv'></div>";
+					reciepeHtml+="<div><div><span>"+vo.title+"</span></div>";
+					reciepeHtml+="</div>";
+					reciepeHtml+="<div class='foodDivBack'></div></div>";
+				});
+				reciepeHtml+="<button onclick='reciepeMove("+right+")' id='reciepeRight'><</button>";
+				$("#foodFavorDiv>div:nth-of-type(1)").html(reciepeHtml);
+				foodDivLength=result.length-1;
+				reciepeInfor(recipeIdx);
+				$("#foodDiv"+recipeIdx).addClass('changeSize');
+			}
+		})
+	}
+</script>
+
+<div id='foodFavorDiv'>
+	<!-- 좋아요 레시피 목록 표기 -->
+	<div></div>
+	<div id='kcalDiv'>
+		<div id='recipeImage' style='cursor:pointer;'>
+			<img src=''/>
+		</div>
+		<div id='recipeInfor'></div>
+	</div>
+</div>
+<div style='position:relative; height:750px; width:10px;'></div>
+
+<div class="modal">
+  <div class="modal_content">
+  	<span onclick='modalOut()' id='modalOut'>x</span>
+	<div id="calImg">Kcal</div>
+	<span>먹어도 될까 말까 고민은 그만!!</span>
+	<br/>
+	<span>클릭 몇번으로 알 수 있어요!!</span>
+	<br/>
+	<br/>
+	<div id='calInputDiv'>
+		<select id='activity'>
+			<option value='비활동적'>비활동적</option>
+			<option value='저활동적'>저활동적</option>
+			<option value='활동적'>활동적</option>
+			<option value='매우 활동적'>매우 활동적</option>
+		</select>
+		<select id='mealTime'>
+			<option value='아침'>아침</option>
+			<option value='점심'>점심</option>
+			<option value='저녁'>저녁</option>
+		</select>&nbsp;&nbsp;
+		체중 : <input id='yourWeight' type='number' step="5" value='50'/>Kg<br/>
+		<button onclick='calKcal()'>권장 칼로리 계산!</button>
+	</div>
+	
+	<br/>
+	<div id='calKcalShow'></div>
+	<div id='lessKcalShow'></div>
+	<div id='calResult'></div>
+  </div>
+</div>
